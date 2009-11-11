@@ -1,0 +1,1038 @@
+spgr=1
+1  P 1
+2  C 1
+3  A 1
+4  B 1
+5  I 1
+6  F 1
+
+spgr=2
+1  P -1
+2  C -1
+3  A -1
+4  B -1
+5  I -1
+6  F -1
+
+spgr=3
+1  P 1 2 1
+3  P 1 1 2
+5  P 2 1 1
+
+spgr=4
+1  P 1 21 1
+3  P 1 1 21
+5  P 21 1 1
+
+spgr=5
+1  C 1 2 1
+7  A 1 2 1
+3  A 1 1 2
+9  B 1 1 2
+5  B 2 1 1
+11  C 2 1 1
+13  I 1 2 1
+15  I 1 1 2
+17  I 2 1 1
+0  I 1 2 1 S
+0  B 1 21 1
+
+spgr=6
+1  P 1 m 1
+3  P 1 1 m
+5  P m 1 1
+
+spgr=7
+1  P 1 c 1
+13  P 1 a 1
+3  P 1 1 a
+15  P 1 1 b
+5  P b 1 1
+17  P c 1 1
+7  P 1 n 1
+9  P 1 1 n
+11  P n 1 1
+
+spgr=8
+1  C 1 m 1
+7  A 1 m 1
+13  I 1 m 1
+3  A 1 1 m
+9  B 1 1 m
+15  I 1 1 m
+5  B m 1 1
+11  C m 1 1
+17  I m 1 1
+
+spgr=9
+1  C 1 c 1
+7  A 1 n 1
+13  I 1 a 1
+2  A 1 a 1
+8  C 1 n 1
+14  I 1 c 1
+3  A 1 1 a
+9  B 1 1 n
+15  I 1 1 b
+4  B 1 1 b
+10  A 1 1 n
+16  I 1 1 a
+5  B b 1 1
+11  C n 1 1
+17  I c 1 1
+6  C c 1 1
+12  B n 1 1
+18  I b 1 1
+0  F 41 d 1
+
+spgr=10
+1  P 1 2/m 1
+3  P 1 1 2/m
+5  P 2/m 1 1
+0  P 1 1 2/m S
+
+spgr=11
+1  P 1 21/m 1
+3  P 1 1 21/m
+5  P 21/m 1 1
+0  P 1 21/m 1 S
+
+spgr=12
+1  C 1 2/m 1
+7  A 1 2/m 1
+13  I 1 2/m 1
+3  A 1 1 2/m
+9  B 1 1 2/m
+15  I 1 1 2/m
+5  B 2/m 1 1
+11  C 2/m 1 1
+17  I 2/m 1 1
+0  I 1 2/m 1 S
+0  F 1 2/m 1
+
+spgr=13
+1  P 1 2/c 1
+7  P 1 2/n 1
+13  P 1 2/a 1
+3  P 1 1 2/a
+9  P 1 1 2/n
+15  P 1 1 2/b
+5  P 2/b 1 1
+11  P 2/n 1 1
+17  P 2/c 1 1
+0  C 1 1 2/a
+0  P 1 2/c 1 S
+
+spgr=14
+1  P 1 21/c 1
+7  P 1 21/n 1
+13  P 1 21/a 1
+3  P 1 1 21/a
+9  P 1 1 21/n
+15  P 1 1 21/b
+5  P 21/b 1 1
+11  P 21/n 1 1
+17  P 21/c 1 1
+
+spgr=15
+1  C 1 2/c 1
+7  A 1 2/n 1
+13  I 1 2/a 1
+3  A 1 1 2/a
+9  B 1 1 2/n
+15  I 1 1 2/b
+5  B 2/b 1 1
+11  C 2/n 1 1
+17  I 2/c 1 1
+0  I 21/c 1
+0  A 1 2/a 1 S
+0  B 1 1 2/b S
+
+spgr=16
+1  P 2 2 2
+
+spgr=17
+1  P 2 2 21
+3  P 21 2 2
+5  P 2 21 2
+
+spgr=18
+1  P 21 21 2
+3  P 2 21 21
+5  P 21 2 21
+
+spgr=19
+1  P 21 21 21
+
+spgr=20
+1  C 2 2 21
+3  A 21 2 2
+5  B 2 21 2
+
+spgr=21
+1  C 2 2 2
+3  A 2 2 2
+5  B 2 2 2
+
+spgr=22
+1  F 2 2 2
+
+spgr=23
+1  I 2 2 2
+
+spgr=24
+1  I 21 21 21
+
+spgr=25
+1  P m m 2
+3  P 2 m m
+5  P m 2 m
+0  P 2 m m S
+
+spgr=26
+1  P m c 21
+2  P c m 21
+3  P 21 m a
+4  P 21 a m
+5  P b 21 m
+6  P m 21 b
+
+spgr=27
+1  P c c 2
+3  P 2 a a
+5  P b 2 b
+
+spgr=28
+1  P m a 2
+2  P b m 2
+3  P 2 m b
+4  P 2 c m
+5  P c 2 m
+6  P m 2 a
+
+spgr=29
+1  P c a 21
+2  P b c 21
+3  P 21 a b
+4  P 21 c a
+5  P c 21 b
+6  P b 21 a
+0  P c a 21 S
+
+spgr=30
+1  P n c 2
+2  P c n 2
+3  P 2 n a
+4  P 2 a n
+5  P b 2 n
+6  P n 2 b
+
+spgr=31
+1  P m n 21
+2  P n m 21
+3  P 21 m n
+4  P 21 n m
+5  P n 21 m
+6  P m 21 n
+0  P 21 m n S
+0  P m 21 n S
+0  P n 21 m S
+0  P m n 21 S
+
+spgr=32
+1  P b a 2
+3  P 2 c b
+5  P c 2 a
+
+spgr=33
+1  P n a 21
+2  P b n 21
+3  P 21 n b
+4  P 21 c n
+5  P c 21 n
+6  P n 21 a
+0  P 21 c n S
+
+spgr=34
+1  P n n 2
+3  P 2 n n
+5  P n 2 n
+
+spgr=35
+1  C m m 2
+3  A 2 m m
+5  B m 2 m
+
+spgr=36
+1  C m c 21
+2  C c m 21
+3  A 21 m a
+4  A 21 a m
+5  B b 21 m
+6  B m 21 b
+
+spgr=37
+1  C c c 2
+3  A 2 a a
+5  B b 2 b
+
+spgr=38
+1  A m m 2
+2  B m m 2
+3  B 2 m m
+4  C 2 m m
+5  C m 2 m
+6  A m 2 m
+
+spgr=39
+1  A b m 2
+2  B m a 2
+3  B 2 c m
+4  C 2 m b
+5  C m 2 a
+6  A c 2 m
+
+spgr=40
+1  A m a 2
+2  B b m 2
+3  B 2 m b
+4  C 2 c m
+5  C c 2 m
+6  A m 2 a
+
+spgr=41
+1  A b a 2
+2  B b a 2
+3  B 2 c b
+4  C 2 c b
+5  C c 2 a
+6  A c 2 a
+
+spgr=42
+1  F m m 2
+3  F 2 m m
+5  F m 2 m
+
+spgr=43
+1  F d d 2
+3  F 2 d d
+5  F d 2 d
+
+spgr=44
+1  I m m 2
+3  I 2 m m
+5  I m 2 m
+
+spgr=45
+1  I b a 2
+3  I 2 c b
+5  I c 2 a
+
+spgr=46
+1  I m a 2
+2  I b m 2
+3  I 2 m b
+4  I 2 c m
+5  I c 2 m
+6  I m 2 a
+
+spgr=47
+1  P m m m
+
+spgr=48
+1  P n n n S
+2  P n n n Z
+
+spgr=49
+1  P c c n
+3  P m a a
+5  P b m b
+
+spgr=50
+1  P b a n S
+2  P b a n Z
+5  P n c b S
+6  P n c b Z
+9  P c n a S
+10  P c n a Z
+
+spgr=51
+1  P m m a
+2  P m m b
+3  P b m m
+4  P c m m
+5  P m c m
+6  P m a m
+
+spgr=52
+1  P n n a
+2  P n n b
+3  P b n n
+4  P c n n
+5  P n c n
+6  P n a n
+0  P n a n S
+
+spgr=53
+1  P m n a
+2  P n m b
+3  P b m n
+4  P c n m
+5  P n c m
+6  P m a n
+0  P b m n S
+
+spgr=54
+1  P c c a
+2  P c c b
+3  P b a a
+4  P c a a
+5  P b c b
+6  P b a b
+
+spgr=55
+1  P b a m
+3  P m c b
+5  P c m a
+
+spgr=56
+1  P c c n
+3  P n a a
+5  P b n b
+
+spgr=57
+1  P b c m
+2  P c a m
+3  P m c a
+4  P m a b
+5  P b m a
+6  P c m b
+
+spgr=58
+1  P n n m
+3  P m n n
+5  P n m n
+
+spgr=59
+1  P m m n S
+2  P m m n Z
+5  P n m m S
+6  P n m m Z
+9  P m n m S
+10  P m n m Z
+9  P m n m
+
+spgr=60
+1  P b c n
+2  P c a n
+3  P n c a
+4  P n a b
+5  P b n a
+6  P c n b
+0  P c n b S
+
+spgr=61
+1  P b c a
+2  P c a b
+
+spgr=62
+1  P n m a
+2  P m n b
+3  P b n m
+4  P c m n
+5  P m c n
+6  P n a m
+0  P b n m S
+0  P m c n S1
+0  P m c n S2
+0  P n a m S
+
+spgr=63
+1  C m c m
+2  C c m m
+3  A m m a
+4  A m a m
+5  B b m m
+6  B m m b
+0  B m m b S
+
+spgr=64
+1  C m c a
+2  C c m b
+3  A b m a
+4  A c a m
+5  B b c m
+6  B m a b
+0  C c m b S
+0  B m a b S
+
+spgr=65
+1  C m m m
+3  A m m m
+5  B m m m
+
+spgr=66
+1  C c c m
+3  A m a a
+5  B b m b
+
+spgr=67
+1  C m m a
+2  C m m b
+3  A b m m
+4  A c m m
+5  B m c m
+6  B m a m
+
+spgr=68
+1  C c c a S
+2  C c c a Z
+3  C c c b S
+4  C c c b Z
+5  A b a a S
+6  A b a a Z
+7  A c a a S
+8  A c a a Z
+9  B b c b S
+10  B b c b Z
+11  B b a b S
+12  B b a b Z
+
+spgr=69
+1  F m m m
+
+spgr=70
+1  F d d d S
+2  F d d d Z
+
+spgr=71
+1  I m m m
+
+spgr=72
+1  I b a m
+3  I m c b
+5  I c m a
+0  I b a m S
+0  I c m a S
+
+spgr=73
+1  I b c a
+2  I c a b
+
+spgr=74
+1  I m m a
+2  I m m b
+3  I b m m
+4  I c m m
+5  I m c m
+6  I m a m
+
+spgr=75
+1  P 4
+
+spgr=76
+1  P 41
+
+spgr=77
+1  P 42
+
+spgr=78
+1  P 43
+
+spgr=79
+1  I 4
+
+spgr=80
+1  I 41
+
+spgr=81
+1  P -4
+
+spgr=82
+1  I -4
+
+spgr=83
+1  P 4/m
+
+spgr=84
+1  P 42/m
+
+spgr=85
+1  P 4/n S
+2  P 4/n Z
+
+spgr=86
+1  P 42/n S
+2  P 42/n Z
+
+spgr=87
+1  I 4/m
+
+spgr=88
+1  I 41/a S
+2  I 41/a Z
+
+spgr=89
+1  P 4 2 2
+
+spgr=90
+1  P 4 21 2
+
+spgr=91
+1  P 41 2 2
+
+spgr=92
+1  P 41 21 2
+
+spgr=93
+1  P 42 2 2
+
+spgr=94
+1  P 42 21 2
+
+spgr=95
+1  P 43 2 2
+
+spgr=96
+1  P 43 21 2
+
+spgr=97
+1  I 4 2 2
+
+spgr=98
+1  I 41 2 2
+
+spgr=99
+1  P 4 m m
+
+spgr=100
+1  P 4 b m
+
+spgr=101
+1  P 42 c m
+
+spgr=102
+1  P 42 n m
+
+spgr=103
+1  P 4 c c
+
+spgr=104
+1  P 4 n c
+
+spgr=105
+1  P 42 m c
+
+spgr=106
+1  P 42 b c
+
+spgr=107
+1  I 4 m m
+
+spgr=108
+1  I 4 c m
+
+spgr=109
+1  I 41 m d
+
+spgr=110
+1  I 41 c d
+
+spgr=111
+1  P -4 2 m
+
+spgr=112
+1  P -4 2 c
+
+spgr=113
+1  P -4 21 m
+
+spgr=114
+1  P -4 21 c
+
+spgr=115
+1  P -4 m 2
+
+spgr=116
+1  P -4 c 2
+
+spgr=117
+1  P -4 b 2
+0  P -4 b 2 S
+
+spgr=118
+1  P -4 n 2
+
+spgr=119
+1  I -4 m 2
+
+spgr=120
+1  I -4 c 2
+
+spgr=121
+1  I -4 2 m
+
+spgr=122
+1  I -4 2 d
+1  I -4 2 d S
+
+spgr=123
+1  P 4/m m m
+
+spgr=124
+1  P 4/m c c
+
+spgr=125
+1  P 4/n b m S
+2  P 4/n b m Z
+
+spgr=126
+1  P 4/n n c S
+2  P 4/n n c Z
+
+spgr=127
+1  P 4/m b m
+
+spgr=128
+1  P 4/m n c
+
+spgr=129
+1  P 4/n m m S
+2  P 4/n m m Z
+0  P 4/n m m S1
+
+spgr=130
+1  P 4/n c c S
+2  P 4/n c c Z
+
+spgr=131
+1  P 42/m m c
+0  P 42/m m c S
+
+spgr=132
+1  P 42/m c m
+
+spgr=133
+1  P 42/n b c S
+2  P 42/n b c Z
+
+spgr=134
+1  P 42/n n m S
+2  P 42/n n m Z
+
+spgr=135
+1  P 42/m b c
+
+spgr=136
+1  P 42/m n m
+
+spgr=137
+1  P 42/n m c S
+2  P 42/n m c Z
+
+spgr=138
+1  P 42/n c m S
+2  P 42/n c m Z
+
+spgr=139
+1  I 4/m m m
+
+spgr=140
+1  I 4/m c m
+
+spgr=141
+1  I 41/a m d S
+2  I 41/a m d Z
+0  F 41/d d m
+
+spgr=142
+1  I 41/a c d S
+2  I 41/a c d Z
+
+spgr=143
+1  P 3
+
+spgr=144
+1  P 31
+
+spgr=145
+1  P 32
+
+spgr=146
+1  R 3 H
+2  R 3 R
+
+spgr=147
+1  P -3
+
+spgr=148
+1  R -3 H
+2  R -3 R
+0  R -3 HR
+
+spgr=149
+1  P 3 1 2
+
+spgr=150
+1  P 3 2 1
+
+spgr=151
+1  P 31 1 2
+
+spgr=152
+1  P 31 2 1
+0  P 31 2 1 S
+
+spgr=153
+1  P 32 1 2
+
+spgr=154
+1  P 32 2 1
+0  P 32 2 1 S
+
+spgr=155
+1  R 3 2 H
+2  R 3 2 R
+0  R 3 2 HR
+
+spgr=156
+1  P 3 m 1
+
+spgr=157
+1  P 3 1 m
+
+spgr=158
+1  P 3 c 1
+
+spgr=159
+1  P 3 1 c
+
+spgr=160
+1  R 3 m H
+2  R 3 m R
+0  R 3 m HR
+
+spgr=161
+1  R 3 c H
+2  R 3 c R
+0  R 3 c HR
+
+spgr=162
+1  P -3 1 m
+
+spgr=163
+1  P -3 1 c
+0  P -3 1 c S
+
+spgr=164
+1  P -3 m 1
+
+spgr=165
+1  P -3 c 1
+
+spgr=166
+1  R -3 m H
+2  R -3 m R
+0  R -3 m HR
+
+spgr=167
+1  R -3 c H
+2  R -3 c R
+0  R -3 c RS
+0  R -3 c HR
+
+spgr=168
+1  P 6
+
+spgr=169
+1  P 61
+
+spgr=170
+1  P 65
+
+spgr=171
+1  P 62
+
+spgr=172
+1  P 64
+
+spgr=173
+1  P 63
+
+spgr=174
+1  P -6
+
+spgr=175
+1  P 6/m
+
+spgr=176
+1  P 63/m
+
+spgr=177
+1  P 6 2 2
+
+spgr=178
+1  P 61 2 2
+
+spgr=179
+1  P 65 2 2
+
+spgr=180
+1  P 62 2 2
+
+spgr=181
+1  P 64 2 2
+
+spgr=182
+1  P 63 2 2
+
+spgr=183
+1  P 6 m m
+
+spgr=184
+1  P 6 c c
+
+spgr=185
+1  P 63 c m
+
+spgr=186
+1  P 63 m c
+
+spgr=187
+1  P -6 m 2
+
+spgr=188
+1  P -6 c 2
+
+spgr=189
+1  P -6 2 m
+
+spgr=190
+1  P -6 2 c
+
+spgr=191
+1  P 6/m m m
+
+spgr=192
+1  P 6/m c c
+
+spgr=193
+1  P 63/m c m
+
+spgr=194
+1  P 63/m m c
+
+spgr=195
+1  P 2 3
+
+spgr=196
+1  F 2 3
+
+spgr=197
+1  I 2 3
+
+spgr=198
+1  P 21 3
+
+spgr=199
+1  I 21 3
+
+spgr=200
+1  P m -3
+
+spgr=201
+1  P n -3 S
+2  P n -3 Z
+
+spgr=202
+1  F m -3
+
+spgr=203
+1  F d -3 S
+2  F d -3 Z
+
+spgr=204
+1  I m -3
+
+spgr=205
+1  P a -3
+
+spgr=206
+1  I a -3
+
+spgr=207
+1  P 4 3 2
+
+spgr=208
+1  P 42 3 2
+
+spgr=209
+1  F 4 3 2
+
+spgr=210
+1  F 41 3 2
+
+spgr=211
+1   I 4 3 2
+
+spgr=212
+1  P 43 3 2
+
+spgr=213
+1  P 41 3 2
+
+spgr=214
+1  I 41 3 2
+
+spgr=215
+1  P -4 3 m
+
+spgr=216
+1  F -4 3 m
+
+spgr=217
+1  I -4 3 m
+
+spgr=218
+1  P -4 3 n
+
+spgr=219
+1  F -4 3 c
+
+spgr=220
+1  I -4 3 d
+0  I -4 3
+
+spgr=221
+1  P m -3 m
+
+spgr=222
+1  P n -3 n S
+2  P n -3 n Z
+
+spgr=223
+1  P m -3 n
+
+spgr=224
+1  P n -3 m S
+2  P n -3 m Z
+
+spgr=225
+1  F m -3 m
+
+spgr=226
+1  F m -3 c
+
+spgr=227
+1  F d -3 m S
+2  F d -3 m Z
+
+spgr=228
+1  F d -3 c S
+2  F d -3 c Z
+
+spgr=229
+1  I m -3 m
+
+spgr=230
+1  I a -3 d
