@@ -2,6 +2,8 @@
 
 import math
 
+from vec import *
+
 import gtk
 import gtk.glade
 
@@ -33,9 +35,10 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
         self.connect( "button_press_event"   , self.on_button_press_event   )
         self.connect( "button_release_event" , self.on_button_release_event )
 
-        self.objs = []
+        self.objs    = []  ## this objs use API
+        self.objs_gl = []  ## this objs draw by themselves
 
-        self.drag = False
+        self.drag  = False
         self.dist  = 10
         self.alpha = 21
         self.theta = 5
@@ -168,8 +171,8 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
 
 
     def select( self, x, y ):
-        glSelectBuffer( len( self.objs ) ) ## allocate a selection buffer
-        glRenderMode( GL_SELECT )          ## change to select mode
+        glSelectBuffer( len( self.objs )*10 ) ## allocate a selection buffer
+        glRenderMode( GL_SELECT )             ## change to select mode
         glInitNames()
 
         glMatrixMode( GL_PROJECTION )
@@ -184,10 +187,14 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
         glLoadIdentity()
         self.gl_modelview()
 
-        # draw in select mode
-        for i,o in enumerate( self.objs ):
+        ## draw in select mode
+        objs = self.objs + self.objs_gl
+        for i,o in enumerate( objs ):
             glPushName( i )  ## new object start to draw
-            o.draw_gl()
+            if hasattr( o, 'draw' ):
+                o.draw( self.api )
+            else:
+                o.draw_gl( )
             glPopName( i )   ## end of object
 
         glMatrixMode( GL_PROJECTION )
@@ -198,17 +205,22 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
         nobj = min( buff, key = lambda b: b[1] )  ## take nearest object
         nobj = nobj[2][0]                         ## take object id
         if nobj and self.hook_select:
-            self.hook_select( self.objs[ nobj ] ) ## pass to hook selected object
-
+            self.hook_select( objs[ nobj ] )      ## pass to hook selected object
 
 
     def display( self ):
-        for o in self.objs:  ## all objects
-            o.draw_gl()      ## ... draw by themself
+        ## draw by ip
+        for o in self.objs:
+            glPushMatrix()
+            o.draw( self.api )
+            glPopMatrix()
+
+        ## draw by themselves
+        map( lambda o: o.draw_gl( ), self.objs_gl )
 
 
 
-class GLApp( object ):
+class DrawGL( object ):
     def __init__( self, gfile ):
         self.wtree = gtk.glade.XML( gfile )    ## load widget tree from glade
         self.wtree.signal_autoconnect( self )  ## connect all event-handlers
@@ -218,24 +230,79 @@ class GLApp( object ):
         self.vbox_btns = wt.get_widget( 'vbox_btns' )   ## box for user-defined buttons
         self.vbox_gl   = wt.get_widget( 'vbox_gl'   )
 
-        self.gl = GLArea()
+        self.gl     = GLArea() ## create opengl area
+        self.gl.api = self     ## store api for it
         self.vbox_gl.pack_start( self.gl )
 
         self.wnd_main.show_all()
 
 
-    def draw( self, obj, draw = True ):
-        if draw:
+    def __call__( self, obj, **opt ):
+        if not hasattr( obj, 'draw' ) and not hasattr( obj, 'draw_gl' ):
+            raise Exception, "Object %s can't be drawn" % obj
+
+        optt = dict( getattr( obj, 'opt', {} ) )  ## take a copy of default values
+        optt.update( opt )                        ## change default values
+        obj.opt = optt                            ## save it to object
+
+        if hasattr( obj, 'draw' ):         ## this obj use standart API
             self.gl.objs.append( obj )
-        else:
-            if obj in self.gl.objs:
-                self.gl.objs.remove( obj )
+
+        if hasattr( obj, 'draw_gl' ):      ## obj use special opengl featrues
+            self.gl.objs_gl.append( obj )
+
         self.gl.queue_draw()
 
 
     def clear( self ):
-        self.gl.objs = []
+        self.gl.objs    = []
+        self.gl.objs_gl = []
         self.gl.queue_draw()
+
+
+    ################# OpenGL API #################
+    def proj( self, v ):
+        return Vec( *gluProject( *v ) )
+
+
+    def trans( self, v ):
+        """ Move coordinate system to point v.
+        """
+        glTranslatef( *v )
+
+
+    def line( self, v1, v2, color, **opt ):
+        glDisable( GL_LIGHTING )      ## disable lightings for lines
+        glEnable( GL_COLOR_MATERIAL )
+
+        glColor3f( *color );
+        glBegin( GL_LINES )
+        glVertex3f( *v1 )
+        glVertex3f( *v2 )
+        glEnd( )
+
+        glDisable( GL_COLOR_MATERIAL )
+        glEnable( GL_LIGHTING )       ## enabling lighting
+
+
+    def sphere( self, pos, r, color, **opt ):
+        # move coordinate system to endpoint of vector
+        glTranslatef( *pos )
+
+        # set sphere shiness
+        glMaterialf( GL_FRONT, GL_SHININESS, 25.0 )
+
+        # set reflection color
+        specReflection = ( 0.7, 0.7, 0.7, 1.0 )
+        glMaterialfv( GL_FRONT, GL_SPECULAR, specReflection )
+
+        # set diffuse & ambient material colors
+        glMaterialfv( GL_FRONT, GL_DIFFUSE, color )
+        glMaterialfv( GL_FRONT, GL_AMBIENT, ( 0.2, 0.2, 0.2 ) )
+
+        qobj = gluNewQuadric()
+        gluSphere( qobj, r, 30, 30 )
+
 
 
     def start( self ):
@@ -269,7 +336,7 @@ class GLApp( object ):
 
 import os.path as p
 
-app = GLApp( p.dirname( p.abspath( __file__ ) ) + '/draw_gl.glade' )
+drawgl = DrawGL( p.dirname( p.abspath( __file__ ) ) + '/draw_gl.glade' )
 #app.wnd_main.present()
 #app.wnd_main.set_keep_above( True )
 

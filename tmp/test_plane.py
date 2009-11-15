@@ -9,7 +9,7 @@ from voron import *
 from spgrp import *
 from reper import *
 
-import draw_gl
+from draw_gl import drawgl
 
 import vec_gl
 import geom_gl
@@ -74,7 +74,7 @@ fd2 = r2.to_dots( 3,3,3 )
 
 
 def draw( nc, n ):
-    draw_gl.app.clear()
+    drawgl.clear()
 
     vo3.draw()
     vo1.draw()
@@ -101,7 +101,7 @@ def down( *args ):
         nl,n = n, n-1
     draw( nl, n )
 
-draw_gl.app.button( 'up', up )
-draw_gl.app.button( 'down', down )
+drawgl.button( 'up', up )
+drawgl.button( 'down', down )
 
-draw_gl.app.start()
+drawgl.start()

@@ -77,7 +77,7 @@ class Mat( object ):
 
 
     def __hash__( self ):
-        return sum( map( lambda x: int( x * 10 ), self[ 0 ] + self[ 1 ] + self[ 2 ] ) )
+        return 1 ## can't be hashable A B C D E F ... X Y Z issue ---> sum( map( lambda x: int( x * 10 ), self[ 0 ] + self[ 1 ] + self[ 2 ] ) )
 
 
     def __eq__( self, other ):

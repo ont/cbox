@@ -40,11 +40,6 @@ def draw_gl( self ):
     glEnd( )
 
 
-def draw( self, draw = True, **opt ):
-    self.opt = { 'color' : ( 0.8, 0.8, 0.8 ) }
-    self.opt.update( opt )
-    dg.app.draw( self, draw )
-
 import geom
-geom.Plane.draw    = draw
 geom.Plane.draw_gl = draw_gl
+geom.Plane.opt = { 'color' : ( 0.8, 0.8, 0.8 ) }

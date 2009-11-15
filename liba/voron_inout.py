@@ -20,7 +20,6 @@ def cut( self, pnts ):
 
     pout += ptch
 
-
     r = self.rep.minimize()
     pout = r.dec2frac( pout )
     pout = map( lambda v: v.z2o(), pout )
@@ -34,7 +33,7 @@ def cut( self, pnts ):
     vz = Vec( 0, 0, 1 )
     for p in pout:
         for dx, dy, dz in ds:
-            v = r.frac2dec( self.pos + dx * vx + dy * vy + dz * vz + p )
+            v = r.frac2dec( dx * vx + dy * vy + dz * vz + p )
             if self.has( v ):
                 p_ch.add( v )
 
@@ -46,7 +45,7 @@ def touch( self, arg ):
     """Test either point touch polyhedra or not.
        arg: point or points in decart coordinate system
     """
-    ps = map( lambda p: ( p.norm( bvec = self.pos ),
+    ps = map( lambda p: ( p.norm( bvec = Vec( 0.0, 0.0, 0.0 ) ),
                           p.center() + self.pos ),
               self.mesh.polys )
 
@@ -69,7 +68,7 @@ def has( self, arg ):
     """Test either point inside polyhedra or not.
        arg: point or points in decart coordinate system
     """
-    ps = map( lambda p: ( p.norm( bvec = self.pos ),
+    ps = map( lambda p: ( p.norm( bvec = Vec( 0.0, 0.0, 0.0 ) ),
                           p.center() + self.pos ),
               self.mesh.polys )
 

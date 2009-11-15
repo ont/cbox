@@ -67,7 +67,8 @@ class Vec( object ):
 
 
     def __hash__( self ):
-        return int( sum( self ) * 10 )
+        return 1 ## vec is not hashable
+                 ## see stackoverflow site for this reason int( sum( self ) * 10 )
 
 
     def __eq__( self, other ):

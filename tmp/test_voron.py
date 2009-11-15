@@ -1,7 +1,7 @@
 import sys
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
 
-import draw_gl
+from draw_gl import drawgl
 
 from vec   import *
 from zell  import *
@@ -67,10 +67,10 @@ vo3 = Voron( r3.v1, r3.v2, r3.v3 )
 vo4 = Voron( r4.v1, r4.v2, r4.v3 )
 
 
-vo1.draw()
+drawgl( vo1 )
 #vo2.draw()
-vo3.draw()
-vo4.draw()
+drawgl( vo3 )
+drawgl( vo4 )
 
 #pnts = set()
 #for a,b,c in ( (i,j,k) for i in xrange( -3,4 )\
@@ -97,12 +97,14 @@ for a,b,c in ( (i,j,k) for i in xrange( -1,2 )\
 #    p.draw( r=0.02 )
 
 for p in filter( vo3.touch, ps1 ) + filter( vo4.has, ps1 ):
-    p.draw( r=0.02 )
+    drawgl( p, r=0.02 )
 
 for p in vo3.cut( list( ps2 ) ):
     print vo3.has( p )
-    p.draw( r=0.04 )
+    drawgl( p, r=0.04 )
 
+#print "1111>", drawgl.gl.objs
+#print "2222>", drawgl.gl.objs_spec
 
-draw_gl.app.start()
+drawgl.start()
 
