@@ -192,7 +192,9 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
         for i,o in enumerate( objs ):
             glPushName( i )  ## new object start to draw
             if hasattr( o, 'draw' ):
+                glPushMatrix()
                 o.draw( self.api )
+                glPopMatrix()
             else:
                 o.draw_gl( )
             glPopName( i )   ## end of object
@@ -202,10 +204,11 @@ class GLArea( gtk.DrawingArea, gtk.gtkgl.Widget ):
 
 
         buff = glRenderMode( GL_RENDER )          ## take info about selected objects
-        nobj = min( buff, key = lambda b: b[1] )  ## take nearest object
-        nobj = nobj[2][0]                         ## take object id
-        if nobj and self.hook_select:
-            self.hook_select( objs[ nobj ] )      ## pass to hook selected object
+        if buff:
+            nobj = min( buff, key = lambda b: b[1] )  ## take nearest object
+            nobj = nobj[2][0]                         ## take object id
+            if nobj and self.hook_select:
+                self.hook_select( objs[ nobj ] )      ## pass to hook selected object
 
 
     def display( self ):

@@ -114,6 +114,4 @@ class DrawIPE( object ):
 #</ipe>
 
 
-
-
 drawipe = DrawIPE()
