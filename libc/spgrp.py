@@ -55,7 +55,7 @@ class SpGrp( object ):
             l = []
             for v in res:
                 tv = v
-                for i in xrange( cnt[ e[0] ] ):
+                for i in xrange( cnt[ e[0] - 1 ] ):
                     tv = m * tv + t
                     l.append( tv )
 
