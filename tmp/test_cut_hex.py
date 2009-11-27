@@ -137,11 +137,66 @@ def to_ipe( *args ):
         #drawipe( vo22 )
         drawipe.save( '/tmp/%s.ipe' % abs( num ) )
 
+    drawipe.clear()
+    drawipe.setup_plane( pln, 10 )
+    import math
+    drawipe.th -= math.pi / 2
+    drawipe( vhex )
+    for p in vhex.has( ds1 ):
+        drawipe( p, r=0.02, color = (0,1,0) )
+
+    for p in vhex.has( ds2 ):
+        drawipe( p, r=0.04, color = (1,0,0) )
+    drawipe.save( '/tmp/sheme.ipe' )
+
+
+def basis2file( *args ):
+    print args
+    drawgl.clear()
+
+    drawgl( vhex )
+
+    in1 = set( vhex.has( ds1 ) )
+    in2 = set( vhex.has( ds2 ) )
+
+
+    f = open( '/tmp/hex.xml', 'w' )
+    f.write(
+"""
+<SubFinder version="1.0 gamma">
+    <Record>
+        <Name formula="Test" name="Test" />
+""")
+
+    import math
+    a = r_hex[0].vlen()
+    b = r_hex[1].vlen()
+    c = r_hex[2].vlen()
+    gam = math.acos( r_hex[0] * r_hex[1] )
+    bet = math.acos( r_hex[0] * r_hex[2] )
+    alf = math.acos( r_hex[1] * r_hex[2] )
+    f.write( '<UnitCell a="%s" b="%s" c="%s" alpha="%s" beta="%s" gamma="%s" spacegroup_name="P1">\n' % ( a,b,c, alf * 180 / math.pi, bet * 180 / math.pi, 60 ) )
+    for p in in1 - in2:
+        f.write( '<Atom name="F" x="%s" y="%s" z="%s" />\n' % tuple( r_hex.dec2frac( p ) ) )
+        drawgl( p, r=0.04, color = (0,1,0) )
+
+    for p in in2:
+        f.write( '<Atom name="S" x="%s" y="%s" z="%s" />\n' % tuple( r_hex.dec2frac( p ) ) )
+        drawgl( p, r=0.02, color = (1,0,0) )
+    f.write(
+"""
+        </UnitCell>
+    </Record>
+</SubFinder>
+""" )
+
+
 
 drawgl.button( 'up', up )
 drawgl.button( 'down', down )
 drawgl.button( 'fill', fill_hex )
 drawgl.button( '2ipe', to_ipe )
+drawgl.button( 'basis2file', basis2file )
 drawgl.select( sel )
 
 drawgl.start()
