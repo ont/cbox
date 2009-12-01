@@ -47,25 +47,29 @@ def to_min( self ):
     #for v in eqv_dr:
     #    drawgl( v, style="line", color=(1,0,0) )
 
-    ## take first shortest
-    v1 = eqv_dr[ 0 ]
+    ## take first vector
+    for v1 in eqv_dr:
+        v2, v3 = None, None
 
-    ## take second shorterst wich is not lie on one line with v1
-    v1n = v1.norm()
-    for v in eqv_dr:
-        if not v1n == v.norm():
-            #print v1n, v.norm()
+        ## take second shorterst wich is not lie on one line with v1
+        v1n = v1.norm()
+        for v in eqv_dr:
+            if not v1n == v.norm():
+                #print v1n, v.norm()
+                v2 = v
+                break
+
+        ## take third shortest wich is not complanar with v1 and v2
+        vc = v1.vcross( v2 )
+        for v in eqv_dr:
+            if abs( vc * v ) > 0.001:
+                v3 = v
+                break
+
+        if v2 and v3: ## good solution founded
+            nrep = Reper( v1,v2,v3 ) ## new reper
             break
-    v2 = v
 
-    ## take third shortest wich is not complanar with v1 and v2
-    vc = v1.vcross( v2 )
-    for v in eqv_dr:
-        if vc * v > 0.001:
-            break
-    v3 = v
-
-    nrep = Reper( v1,v2,v3 ) ## new reper
 
     #DEBUG DRAW
     #for v in nrep:
