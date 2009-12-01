@@ -20,6 +20,8 @@ class SpGrp( object ):
         self.mydata = self.data[ self.num-1 ][ self.snum-1 ]
 
         self.gens = self.mydata['gens']
+        self.gens.append( ( 0, (0.0, 0.0, 0.0) ) )
+        self.gens.reverse()
         if self.mydata['inv']:
             self.gens.append( ( 1, (0.0, 0.0, 0.0) ) )
 
@@ -31,7 +33,7 @@ class SpGrp( object ):
     def __getitem__( self, n ):
 
         e = self.gens[ n ]
-        m = self.genr[ e[0] - 1 ]
+        m = self.genr[ e[0] ]
         t =  Vec( *e[1] )
         return ( m, t )
 
@@ -58,11 +60,11 @@ class SpGrp( object ):
         """
         res = set([ v ])
         for e in self.gens:
-            m = self.genr[ e[0] - 1 ]
+            m = self.genr[ e[0] ]
             t = Vec( *e[1] )
             toadd = set()
-            for v in res:
-                l = []
+            for v in res:  ## apply generator to each vec in result set
+                l = []     ## l = [ e * v, e^2 * v, e^3 * v, ... ]
                 tv = v.z2o()
                 while tv not in l:
                     l.append( tv )
@@ -97,6 +99,10 @@ pdir = os.path.dirname( __file__ )
 SpGrp.data = pickle.load( open(  os.path.join( pdir , 'spgrp.pkl' ), 'rb' ) )
 
 SpGrp.genr = [
+        Mat(  1,  0,  0,
+              0,  1,  0,    ##  1
+              0,  0,  1 ),
+
         Mat( -1,  0,  0,
               0, -1,  0,    ## -1
               0,  0, -1 ),

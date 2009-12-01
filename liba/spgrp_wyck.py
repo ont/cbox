@@ -2,6 +2,7 @@ from vec   import *
 from spgrp import *
 
 import spgrp_gens
+import vec_z2o
 
 deg0 ={
   1  :  ("0"   , "0"   , "0"  ),
@@ -111,42 +112,56 @@ def wyckiter( self ):
         return digits
 
 
+    #print 'self', '------------>', list( self )
     ns = ('a','b','c','d','e','f','g','h','i','j','k','l','m','n')
     for w,n in zip( self.data[ self.num-1 ][ self.snum-1 ]['wyck'], ns ):
         if w[ 0 ] in deg0.keys():
             xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
-            l = set( [ Vec( *xyz ) ] )
+            wv = Vec( *xyz )  ## wyckoff vec
 
             dl = digitlist( w[ 1 ], len( self ) + 1 )      ## len( self ) == count of symm elems
-            dl.reverse()
+            #dl.reverse()
             #print '-------new-------'
+            #print 'w =', w
             #print w[ 1 ], '--(binary)-->', dl
             #print w[ 1 ], '--(binary)-->', digitlist( w[ 1 ], 20 )
+            #print 'wv =', wv
+            #print 'self', '------------>', list( self )
 
 
             ops = []
-            for i,e in enumerate( self ):                  ## enumerate all symm elements
+            for i,e in enumerate( self ):  ## enumerate all symm elements
                 if dl[ i ]:
                     ops.append( e )
 
+            if self.mydata['inv']:         ## append inversion to operations
+                ops.append( self[ -1 ] )
+
+
+            #print 'ops before = ', len( ops )
             #print 'ops before = ', ops
             ops = self.gens2set( ops )
-            #print 'ops after = ', ops
+            #print 'ops after = ', len( ops )
 
-            ln = []
+            res = set()
+            res.add( wv )
+
             for o in ops:
-                for v in l:
-                    ln.append( o[0] * v + o[1] )
-            l.update( ln )
+                res.add( ( o[0] * wv + o[1] ).z2o() )
 
+            #print res
+            #print 'before cvecs --->', len( res )
 
-            ln = []
-            for v in l:
+            l = []
+            for v in res:
                 for vc in self.cvecs():
-                    ln.append( v + vc )
-            l.update( ln )
+                    l.append( (v + vc).z2o() )
+            res.update( l )
 
-            yield list( l )
+            #print 'cvecs ---------->', self.cvecs()
+            #print 'after  cvecs --->', len( res )
+
+            yield list( res )
         else:
             #print "none :(", w
             pass
