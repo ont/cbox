@@ -27,6 +27,10 @@ for x in xrange( 2 ):
         for z in xrange( 2 ):
             print v + x * a + y * b + z * c, x, y, z
 
+print '---[start of symm ops]---'
+for e in s:
+    print e
+print '---[end of symm ops  ]---'
 
 from reper import *
 import reper_min

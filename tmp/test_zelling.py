@@ -20,26 +20,29 @@ from spgrp import *
 #           Vec( 0.0, 2.0, 2.0 ) )
 from math import *
 
-## Hexagonal
-alf = 120 * pi / 180.0
-r = Reper( Vec( 1.0, 0.0, 0.0 ),
-           Vec( cos(alf), sin(alf), 0.0 ),
-           Vec( 0.0, 0.0, 3.0 ) )
+## Cubic
+r = Reper.from_abc( 1, 1, 1, pi/2, pi/2, pi/2 )
 
-## Triclinical
-r = Reper.from_abc( 1, 2, 3, pi/3, pi/4, pi/5 )
-
-## Monoclinic
-r = Reper.from_abc( 1, 2, 3, pi/2, pi/2, pi/5 )
-
-## Orthorombic
-r = Reper.from_abc( 1, 2, 3, pi/2, pi/2, pi/2 )
-
-## Rombohedral (trigonal)
-r = Reper.from_abc( 1, 1, 1, pi/3.3, pi/3.3, pi/3.3 )
-
-## Tetragonal
-r = Reper.from_abc( 1, 1, 3, pi/2, pi/2, pi/2 )
+### Hexagonal
+#alf = 120 * pi / 180.0
+#r = Reper( Vec( 1.0, 0.0, 0.0 ),
+#           Vec( cos(alf), sin(alf), 0.0 ),
+#           Vec( 0.0, 0.0, 3.0 ) )
+#
+### Triclinical
+#r = Reper.from_abc( 1, 2, 3, pi/3, pi/4, pi/5 )
+#
+### Monoclinic
+#r = Reper.from_abc( 1, 2, 3, pi/2, pi/2, pi/5 )
+#
+### Orthorombic
+#r = Reper.from_abc( 1, 2, 3, pi/2, pi/2, pi/2 )
+#
+### Rombohedral (trigonal)
+#r = Reper.from_abc( 1, 1, 1, pi/3.3, pi/3.3, pi/3.3 )
+#
+### Tetragonal
+#r = Reper.from_abc( 1, 1, 3, pi/2, pi/2, pi/2 )
 
 
 
@@ -76,13 +79,18 @@ def test( n, sn ):
 
 
 s = set()
+f = open( '/tmp/spgrp.out', 'w' )
 for i in xrange( 1, 231 ):
     for j in xrange( 1, len( SpGrp.data[ i-1 ] ) + 1 ):
         if test( i, j ):
             s.add( i )
+            f.write( "%s %s\n" % (i,j) )
             print ( i, j ),
+f.close()
 
 print
+print "set() - set() =", set( range( 1, 231 ) ) - s
+
 l = list( s )
 l.sort()
 print '----', l

@@ -1,6 +1,8 @@
 from mat  import Mat
 from vec  import Vec
 
+import vec_z2o
+
 class SpGrp( object ):
     data = None   ## here all info about all space groups
                   ## data[ num ][ snum ] = { inv  =  has inversion element
@@ -17,13 +19,18 @@ class SpGrp( object ):
         self.snum = snum
         self.mydata = self.data[ self.num-1 ][ self.snum-1 ]
 
+        self.gens = self.mydata['gens']
+        if self.mydata['inv']:
+            self.gens.append( ( 1, (0.0, 0.0, 0.0) ) )
+
 
     def __len__( self ):
-        return len( self.mydata['gens'] )
+        return len( self.gens )
 
 
     def __getitem__( self, n ):
-        e = self.mydata['gens'][ n ]
+
+        e = self.gens[ n ]
         m = self.genr[ e[0] - 1 ]
         t =  Vec( *e[1] )
         return ( m, t )
@@ -34,40 +41,50 @@ class SpGrp( object ):
         """
         typ = self.mydata['symb'][0]
         ##TODO: find vectors for B and test for A and C and R
+        ##TODO: http://img.chem.ucl.ac.uk/sgp/large/146az1.htm
         vs = { 'A':[ Vec( 0, 0.5, 0.5 ) ],
                'C':[ Vec( 0.5, 0.5, 0 ) ],
-               'B':None,
+               'B':[], ##TODO: <<< error
                'F':[ Vec( 0, 0.5, 0.5 ),Vec( 0.5, 0, 0.5 ), Vec( 0.5, 0.5, 0 ) ],
                'I':[ Vec( 0.5, 0.5, 0.5 ) ],
                'P':[],
-               'R':[ Vec( 2.0/3.0, 1.0/3.0, 1.0/3.0 ),
-                     Vec( 1.0/3.0, 2.0/3.0, 2.0/3.0 ) ]
+               'R':[]  ##TODO: <<< error  (some coordinate orientation has +(2/3,1/3,1/3),(1/3,2/3,2/3)
              }
         return vs[ typ ]
 
 
     def __mul__( self, v ):
-        res = [ v ]
-        cnt = ( 1,1,1,1,1,1,1,1,1,1,1,2,2,3,3 )  ## how many times to apply generator...
-        for e in self.mydata['gens']:
+        """Vector v must be in fractional coordinate system.
+        """
+        res = set([ v ])
+        for e in self.gens:
             m = self.genr[ e[0] - 1 ]
             t = Vec( *e[1] )
-            l = []
+            toadd = set()
             for v in res:
-                tv = v
-                for i in xrange( cnt[ e[0] - 1 ] ):
-                    tv = m * tv + t
+                l = []
+                tv = v.z2o()
+                while tv not in l:
                     l.append( tv )
+                    tv = m * tv + t
+                    tv = tv.z2o()   ## cut to unit volume
 
-            res.extend( l )
+                toadd.update( l )
+
+
+            #    for i in xrange( cnt[ e[0] - 1 ] ):
+            #        tv = m * tv + t
+            #        l.append( tv )
+
+            res.update( toadd )
 
         l = []
         for v in res:
             for vc in self.cvecs():
-                l.append( v + vc )
-        res.extend( l )
+                l.append( (v + vc).z2o() )
+        res.update( l )
 
-        return list( set( res ) )
+        return list( res )
 
 
     def __repr__( self ):
