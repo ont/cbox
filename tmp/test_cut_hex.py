@@ -1,3 +1,6 @@
+import psyco
+psyco.full()
+
 import sys
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
 
@@ -7,9 +10,12 @@ sys.path.extend( [ '../lib', '../liba', '../libc' ] )
 from vec   import *
 from voron import *
 from reper import *
+from ucell import *
+from spgrp import *
 
 ## drawing
-from draw_gl import drawgl
+from draw_gl  import drawgl
+from draw_ipe import drawipe
 import vec_gl
 import geom_gl
 import voron_gl
@@ -17,6 +23,7 @@ import voron_gl
 ## converting
 import vec2plane
 import reper2dots
+import ucell_min
 
 ## filtering
 import geom_inout
@@ -97,8 +104,6 @@ def down( *args ):
     num += 1
     draw()
 
-def sel( obj ):
-    print obj
 
 
 def fill_hex( *args ):
@@ -119,7 +124,6 @@ def fill_hex( *args ):
 
 def to_ipe( *args ):
     #global num, r0, dr
-    from draw_ipe import drawipe
 
     for num in xrange( -9, 1 ):
         drawipe.clear()
@@ -150,45 +154,109 @@ def to_ipe( *args ):
     drawipe.save( '/tmp/sheme.ipe' )
 
 
-def basis2file( *args ):
-    print args
-    drawgl.clear()
+ucm = None
+def symm( *args ):
+    global ucm
+    uc = UCell( r_hex )
+    uc.add( 'A', vhex.has( ds1 ) )
+    uc.add( 'B', vhex.has( ds2 ) )
+    ucm = uc.to_min()
+    print uc
+    print ucm
 
-    drawgl( vhex )
+    for v in ucm.pnts['A']:
+        drawgl( v )
 
-    in1 = set( vhex.has( ds1 ) )
-    in2 = set( vhex.has( ds2 ) )
+    for v in ucm.pnts['B']:
+        drawgl( v, r = 0.1, color = (1,0,0) )
+
+    for v in ucm.rep:
+        drawgl( v, style = 'line', color = (0,1,0) )
+    #for l in open( '/tmp/spgrp.out', 'r' ).readlines():
+    #    s = SpGrp( *map( int, l.split( ) ) )
+    #    print s
+    #    #for e in s:
+    #        #print e
 
 
-    f = open( '/tmp/hex.xml', 'w' )
-    f.write(
-"""
-<SubFinder version="1.0 gamma">
-    <Record>
-        <Name formula="Test" name="Test" />
-""")
-
+def view2ipe( *args ):
     import math
-    a = r_hex[0].vlen()
-    b = r_hex[1].vlen()
-    c = r_hex[2].vlen()
-    gam = math.acos( r_hex[0] * r_hex[1] )
-    bet = math.acos( r_hex[0] * r_hex[2] )
-    alf = math.acos( r_hex[1] * r_hex[2] )
-    f.write( '<UnitCell a="%s" b="%s" c="%s" alpha="%s" beta="%s" gamma="%s" spacegroup_name="P1">\n' % ( a,b,c, alf * 180 / math.pi, bet * 180 / math.pi, 60 ) )
-    for p in in1 - in2:
-        f.write( '<Atom name="F" x="%s" y="%s" z="%s" />\n' % tuple( r_hex.dec2frac( p ) ) )
-        drawgl( p, r=0.04, color = (0,1,0) )
+    drawipe.clear()
 
-    for p in in2:
-        f.write( '<Atom name="S" x="%s" y="%s" z="%s" />\n' % tuple( r_hex.dec2frac( p ) ) )
-        drawgl( p, r=0.02, color = (1,0,0) )
-    f.write(
-"""
-        </UnitCell>
-    </Record>
-</SubFinder>
-""" )
+    for v in ucm.pnts['A']:
+        drawipe( v )
+
+    for v in ucm.pnts['B']:
+        drawipe( v, r = 0.1, color = (1,0,0) )
+
+    for v in ucm.rep:
+        drawipe( v, style = 'line', color = (0,1,0) )
+
+    drawipe.ortho = True
+    drawipe.th   = drawgl.gl.theta * math.pi / 180
+    drawipe.al   = drawgl.gl.alpha * math.pi / 180
+    drawipe.dist = drawgl.gl.dist
+    drawipe.save( '/tmp/sheme.ipe' )
+
+
+
+def sel( obj ):
+    global ucm
+    if type( obj ) is Vec:
+        s = SpGrp( 166, 2 )
+        p = ucm.rep.dec2frac( obj )
+        for v in s * p:
+            v = ucm.rep * v
+            drawgl( v, r = 0.05, color = (1,0,0) )
+
+
+nelem = 0
+def symmtest( *args ):
+    basisA = ucm.rep.dec2frac( ucm.pnts['A'] )
+    basisB = ucm.rep.dec2frac( ucm.pnts['B'] )
+    print len( basisA )
+    basisA = set( basisA )
+    basisA.remove( Vec( 0.0, 0.0, 0.0 ) )
+    print len( basisA )
+
+    #for l in open( '/tmp/spgrp.out', 'r' ).readlines():
+    for i in xrange( 1, 231 ):
+        for j in xrange( 1, len( SpGrp.data[ i-1 ] ) + 1 ):
+            #s = SpGrp( *map( int, l.split( ) ) )
+            s = SpGrp( i, j )
+            #print s
+
+            f = True
+            for p in basisA:
+                for v in s * p:
+                    if v not in basisA:
+                        f = False
+            if f:
+                f = True
+                for p in basisB:
+                    for v in s * p:
+                        if v not in basisB:
+                            f = False
+                if f:
+                    print '---', s, 'YES'
+            #else:
+            #    print '---', s, 'no'
+
+
+#def symmup( *args ):
+#    global nelem
+#    nelem += 1
+#    if nelem >= len( s ):
+#        nelem -= 1
+#    symmdraw()
+#
+#def symmdown( *args ):
+#    global nelem
+#    nelem -= 1
+#    if nelem < 0:
+#        nelem += 1
+#    symmdraw()
+
 
 
 
@@ -196,7 +264,11 @@ drawgl.button( 'up', up )
 drawgl.button( 'down', down )
 drawgl.button( 'fill', fill_hex )
 drawgl.button( '2ipe', to_ipe )
-drawgl.button( 'basis2file', basis2file )
+drawgl.button( 'symm', symm )
+drawgl.button( 'symmtest', symmtest )
+drawgl.button( 'view2ipe', view2ipe )
+#drawgl.button( 'symmup', symmup )
+#drawgl.button( 'symmdown', symmdown )
 drawgl.select( sel )
 
 drawgl.start()
