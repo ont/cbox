@@ -15,9 +15,6 @@ def to_zell( self ):
 
     n = v3 * v4
 
-    print '---', v1, v2
-    print '---', k
-
     return Zell( g,h,k,l,m,n )
 
 

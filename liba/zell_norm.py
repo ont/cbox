@@ -9,7 +9,7 @@ def norm( self ):
     s = ( (4,2), (3,2), (3,1), (4,5), (5,3), (4,3) ) ## swaps
 
     l = list( self )
-    while filter( lambda e: e > 0, l ):
+    while filter( lambda e: e > 0.00001, l ):
         for i in xrange( 6 ):
             if l[ i ] > 0:
                 ln = [ e + l[ i ] for e in l ]      ## all +g
