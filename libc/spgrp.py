@@ -38,6 +38,11 @@ class SpGrp( object ):
         return ( m, t )
 
 
+    @classmethod
+    def subs( klas, num ):
+        return xrange( 1, len( klas.data[ num-1 ] ) + 1 )
+
+
     def cvecs( self ):
         """ Return centering vectors for this space group.
         """
