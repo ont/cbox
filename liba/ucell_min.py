@@ -21,6 +21,7 @@ def to_min( self ):
     eqv_dr = set()  ## all possible translations wich translate each point of
                     ## this ucell (self) to extended ucell (ext)
 
+    #print '--[1]-- find eqv_dr'
     ## for each pair from mps...
     for i in xrange( len(mps) ):
         for j in xrange( i+1, len(mps) ):
@@ -47,6 +48,7 @@ def to_min( self ):
     #for v in eqv_dr:
     #    drawgl( v, style="line", color=(1,0,0) )
 
+    #print '--[2]-- find v1,v2,v3'
     ## take first vector
     for v1 in eqv_dr:
         v2, v3 = None, None
@@ -74,29 +76,16 @@ def to_min( self ):
     #DEBUG DRAW
     #for v in nrep:
     #    drawgl( v, style="line", color=(0,1,0) )
+    #print '--[3]-- reduce ucell'
 
     uc   = UCell( nrep )
 
+    ## reduce basis
     for k,vs in self.pnts.iteritems():
-        vsn = set()  ## new basis
-        vs_sorted = list( vs )
-        vs_sorted.sort( key = lambda v: v.vlen() )  ## nearest to coordinate origin - better
-        for v in vs_sorted:
-            fbasis = True  ## this is point from basis
-            for vv in vsn: ## test with each point in new basis
-                dr = vv - v
-                #print dr
-                dr = nrep.dec2frac( dr )  ## transform vector from point v to vv to fractional coordinates
-                dr = dr.z2o()             ## cut all coordinates to range [0,1)
-                if dr.vlen2() < 0.001:    ## dr != Vec( 0.0, 0.0, 0.0 )
-                    fbasis = False        ## point v is not in basis
-                    break
-
-            if fbasis:
-                v = nrep.dec2frac( v ).z2o()    ## cut basis vector by new unit cell
-                vsn.add( nrep.frac2dec( v ) )   ## transform it back to decart and add to basis
-
-        #print k, "--->", vsn
+        vsn = nrep.dec2frac( vs )
+        vsn = map( lambda v: v.z2o(), vsn )
+        vsn = set( vsn )
+        vsn = nrep.frac2dec( vsn )
         uc.add( k, vsn )
 
 
