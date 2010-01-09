@@ -164,11 +164,21 @@ def symm( *args ):
     print uc
     print ucm
 
+    r = ucm.rep
+    r.v1 = -1 * r.v1
+    print r.v3 * r.v1.vcross( r.v2 )
+    f = open( '/tmp/basis_pcub_pcub.txt', 'w' )
+    f.write( "rprim %s %s %s\n      %s %s %s\n      %s %s %s\n" % ( tuple( r[0] ) + tuple( r[1] ) + tuple( r[2] ) )  )
+    f.write( '-----------\n' )
     for v in ucm.pnts['A']:
+        f.write( "%s %s %s\n" % tuple( r.dec2frac( v ) ) )
         drawgl( v )
 
+    f.write( '-----------\n' )
     for v in ucm.pnts['B']:
+        f.write( "%s %s %s\n" % tuple( r.dec2frac( v ) ) )
         drawgl( v, r = 0.1, color = (1,0,0) )
+    f.close()
 
     for v in ucm.rep:
         drawgl( v, style = 'line', color = (0,1,0) )

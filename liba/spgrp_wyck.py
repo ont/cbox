@@ -114,7 +114,7 @@ def wyckiter( self ):
 
     #print 'self', '------------>', list( self )
     ns = ('a','b','c','d','e','f','g','h','i','j','k','l','m','n')
-    for w,n in zip( self.data[ self.num-1 ][ self.snum-1 ]['wyck'], ns ):
+    for w,n in zip( self.mydata['wyck'], ns ):
         if w[ 0 ] in deg0.keys():
             xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
             wv = Vec( *xyz )  ## wyckoff vec
@@ -129,6 +129,7 @@ def wyckiter( self ):
             #print 'self', '------------>', list( self )
 
 
+            #print '--(1)-- enumerate( self )'
             ops = []
             for i,e in enumerate( self ):  ## enumerate all symm elements
                 if dl[ i ]:
@@ -140,18 +141,21 @@ def wyckiter( self ):
 
             #print 'ops before = ', len( ops )
             #print 'ops before = ', ops
+            #print '--(2)-- ops = gens2set( .. )'
             ops = self.gens2set( ops )
             #print 'ops after = ', len( ops )
 
             res = set()
             res.add( wv )
 
+            #print '--(3)-- apply ops'
             for o in ops:
                 res.add( ( o[0] * wv + o[1] ).z2o() )
 
             #print res
             #print 'before cvecs --->', len( res )
 
+            #print '--(4)-- centering...'
             l = []
             for v in res:
                 for vc in self.cvecs():

@@ -9,8 +9,9 @@ class DrawIPE( object ):
     def __init__( self ):
         self.pos = Vec( 0,0,0 )  ## position for trans
         self.ipe = Painter()
-        self.objs     = []
-        self.objs_ipe = []
+        self.grp = None          ## for usage in self.save
+        self.objs     = [[], ]
+        self.objs_ipe = [[], ]
 
 
     def setup( self, al, th, dist, ang = 40 ):
@@ -52,6 +53,15 @@ class DrawIPE( object ):
         self.pos += v
 
 
+    def group( self ):
+        """ Create new group to add to when self.__call__
+        """
+        if self.objs[ -1 ]:
+            self.objs.append( [] )
+        if self.objs_ipe[ -1 ]:
+            self.objs_ipe.append( [] )
+
+
     def line( self, v1, v2, color, **opt ):
         v1 = self.proj( v1 )
         v2 = self.proj( v2 )
@@ -59,7 +69,7 @@ class DrawIPE( object ):
         s.color = " ".join( map( lambda a: str( 1-a ), color ) )
         s.width  = opt.get( 'width', 'normal' )
         s.style  = opt.get( 'style', None     )
-        self.ipe.objs.append( s )
+        self.grp.add( s )
 
 
     def sphere( self, pos, r, color, **opt ):
@@ -67,7 +77,7 @@ class DrawIPE( object ):
         #r = r/( pos.z + self.dist ) * 200 / self.tg
         c = Circle( pos, r )
         c.color = " ".join( map( lambda a: str( 1-a ), color ) )
-        self.ipe.objs.append( c )
+        self.grp.add( c )
 
 
     def __call__( self, obj, **opt ):
@@ -79,26 +89,33 @@ class DrawIPE( object ):
         obj.opt = optt                            ## save it to object
 
         if hasattr( obj, 'draw' ):         ## this obj use standart API
-            self.objs.append( obj )
+            self.objs[-1].append( obj )
 
         if hasattr( obj, 'draw_ipe' ):     ## obj use special ipe featrues
-            self.objs_ipe.append( obj )
+            self.objs_ipe[-1].append( obj )
 
 
     def clear( self ):
-        self.objs     = []
-        self.objs_ipe = []
+        self.objs     = [[], ]
+        self.objs_ipe = [[], ]
 
 
     def save( self, fname ):
         self.ipe.objs = []  ## clear 2D objects
 
-        for o in self.objs:
-            self.pos = Vec( 0,0,0 )
-            o.draw( self )  ## draw with api
+        for g in self.objs: ## for each group...
+            self.grp = Group()
 
-        for o in self.objs_ipe:
-            o.draw( page )  ## obj save to root by self
+            for o in g:     ## for each object in group
+                self.pos = Vec( 0,0,0 )
+                o.draw( self )  ## draw with api
+
+            self.ipe.objs.append( self.grp ) ## send created group to ipe
+
+
+        for g in self.objs_ipe:
+            for o in g:
+                o.draw( self.ipe )  ## obj save to root by self
 
         self.ipe.saveTo( fname )
 

@@ -17,11 +17,13 @@ def gens2set( self, gens ):
     os = set( )        ## old set
     while ns != os:
         os = set( ns ) ## copy constructor
-        ns = set( )
+        ns = []
         for e1 in os:
             for e2 in os:
-                ns.add( ( e1[0]*e2[0],                    ## U1 * U2
-                          (e1[0]*e2[1] + e1[1]).z2o() ) ) ## (U1 * betta + alpha).z2o()
+                ns.append( ( e1[0]*e2[0],                   ## U1 * U2
+                           ( e1[0]*e2[1] + e1[1]).z2o() ) ) ## (U1 * betta + alpha).z2o()
+        ns = set( ns )
+
     return list( ns )
 
 

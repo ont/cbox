@@ -74,7 +74,7 @@ def has( self, arg ):
 
     def test( pnt ):
         for n,c in ps:
-            if n * ( pnt - c ) > 0.0001:
+            if n * ( pnt - c ) > 0.001:
                 return False
         return True
 

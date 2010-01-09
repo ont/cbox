@@ -68,6 +68,21 @@ class Span( object ):
         path.text = text
 
 
+class Group( object ):
+    """ Class for grouping ipe objects
+    """
+    def __init__( self ):
+        self.objs = []  ## objects in group
+
+    def add( self, obj ):
+        self.objs.append( obj )
+
+    def saveXML( self, root ):
+        grp = ET.SubElement( root, "group" )
+        for o in self.objs:
+            o.saveXML( grp )
+
+
 
 class Painter( object ):
     """ Class for saving objects into XML file.
