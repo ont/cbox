@@ -304,7 +304,7 @@ class DrawGL( object ):
         glMaterialfv( GL_FRONT, GL_AMBIENT, ( 0.2, 0.2, 0.2 ) )
 
         qobj = gluNewQuadric()
-        gluSphere( qobj, r, 30, 30 )
+        gluSphere( qobj, r, 15, 15 )
 
 
 

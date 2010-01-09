@@ -4,7 +4,8 @@ from mat import *
 import vec_z2o
 
 
-def gens2set( self, gens ):
+@classmethod
+def gens2set( klas, gens ):
     """ Multiply all elements in gens and
         return unique symmetry elements.
     """
@@ -27,5 +28,13 @@ def gens2set( self, gens ):
     return list( ns )
 
 
+def full( self ):
+    """ Return all symmetry elements for this
+        space group which works in unit cell [0,1]
+    """
+    return spgrp.SpGrp.gens2set( list( self ) )  ## expand generators set
+
+
 import spgrp
 spgrp.SpGrp.gens2set = gens2set
+spgrp.SpGrp.full = full
