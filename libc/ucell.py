@@ -12,15 +12,14 @@ class UCell( object ):
         else:
             self.rep = args[ 0 ]
 
-        self.pnts = {}
+        self.atoms = {}
 
-
-    def add( self, name, pnts ):
+    def add( self, name, atoms ):
         """ Add a group of named points (atoms)
             to unit cell.
             Points mus be in decart (not fractional) coordinate system.
         """
-        self.pnts[ name ] = set( pnts )
+        self.atoms[ name ] = set( atoms )
 
 
     def __mul__( self, n ):
@@ -31,7 +30,7 @@ class UCell( object ):
                        for k in xrange( -n, n+1 ) ]
         uc = UCell( self.rep )
 
-        for k,vs in self.pnts.iteritems():
+        for k,vs in self.atoms.iteritems():
             toadd = set()
             for t in ns:
                 vt = self.rep * t
@@ -46,7 +45,7 @@ class UCell( object ):
         """ Translate ucell by obj
         """
         nc = UCell( self.rep )
-        for k,vs in self.pnts.iteritems():
+        for k,vs in self.atoms.iteritems():
             vs = map( lambda v: v + obj, vs )  ## translate vectors
             nc.add( k, vs )
         return nc

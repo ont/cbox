@@ -8,7 +8,7 @@ def dec2frac( self, arg ):
     m = Mat( *els ).t().inv()
 
     ## TODO: may be better detection of list, tuples, sets ... (iterables)
-    if type( arg ) is not Vec:
+    if not isinstance( arg, Vec ):
         try:
             return map( lambda v: m * v, arg )
         except:
@@ -24,7 +24,7 @@ def frac2dec( self, arg ):
     els = list( self.v1 ) + list( self.v2 ) + list( self.v3 )
     m = Mat( *els ).t()
 
-    if type( arg ) is not Vec:
+    if not isinstance( arg, Vec ):
         try:
             return map( lambda v: m * v, arg )
         except:

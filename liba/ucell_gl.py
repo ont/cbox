@@ -4,6 +4,8 @@ from vec import *
 
 import ucell
 ucell.UCell.clrs = {
+    "A"   :  ( 255 , 0   , 0   ),
+    "B"   :  ( 0   , 255 , 0   ),
     "H"   :  ( 198 , 39  , 227 ),
     "He"  :  ( 104 , 116 , 143 ),
     "Li"  :  ( 192 , 140 , 76  ),
@@ -131,7 +133,7 @@ def draw( self, api ):
     api.line( v0, self.rep.v2, (1,1,1) )
     api.line( v0, self.rep.v3, (1,1,1) )
 
-    for name, vecs in self.pnts.iteritems():
+    for name, vecs in self.atoms.iteritems():
         for v in vecs:
             color = map( lambda c: c/255.0, self.clrs.get( name, (255,255,255) ) )
             api.sphere( v, 0.03, color  )

@@ -1,4 +1,4 @@
-from draw_gl import drawgl
+#from draw_gl import drawgl
 
 from ucell import UCell
 from reper import Reper
@@ -12,7 +12,7 @@ def to_min( self ):
 
     ext = self * 1  ## extend in all directions by 1
 
-    mps = min( self.pnts.values(), key = lambda l: len( l ) )  ## "minimal points"
+    mps = min( self.atoms.values(), key = lambda l: len( l ) )  ## "minimal points"
                                                                ## this is minimal group of points
     mps = list( mps )  ## convert set() to ordered list()
 
@@ -29,8 +29,8 @@ def to_min( self ):
             uct = self + dr       ## translated ucell
 
             eqv = True  ## translate equiv or not
-            for k,vs in uct.pnts.iteritems():
-                if not vs.issubset( ext.pnts[ k ] ):  ## some points not intersected with others
+            for k,vs in uct.atoms.iteritems():
+                if not vs.issubset( ext.atoms[ k ] ):  ## some points not intersected with others
                     eqv = False
                     break
             if eqv:
@@ -81,7 +81,7 @@ def to_min( self ):
     uc   = UCell( nrep )
 
     ## reduce basis
-    for k,vs in self.pnts.iteritems():
+    for k,vs in self.atoms.iteritems():
         vsn = nrep.dec2frac( vs )
         vsn = map( lambda v: v.z2o(), vsn )
         vsn = set( vsn )
@@ -90,7 +90,7 @@ def to_min( self ):
 
 
     return uc
-    #for v in ext.pnts['K']:
+    #for v in ext.atoms['K']:
     #    drawgl( v, r = 0.06, color=(1,0,0) )
 
 
