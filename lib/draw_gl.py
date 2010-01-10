@@ -290,6 +290,8 @@ class DrawGL( object ):
 
     def sphere( self, pos, r, color, **opt ):
         # move coordinate system to endpoint of vector
+        glPushMatrix()
+
         glTranslatef( *pos )
 
         # set sphere shiness
@@ -305,6 +307,8 @@ class DrawGL( object ):
 
         qobj = gluNewQuadric()
         gluSphere( qobj, r, 15, 15 )
+
+        glPopMatrix()
 
 
 
