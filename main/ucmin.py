@@ -6,6 +6,7 @@ from strutils import *
 from reper    import *
 from voron    import *
 from spgrp    import *
+from vec      import *
 
 import vec_z2o
 import ucell_min
@@ -20,6 +21,7 @@ fbasis = False
 fmin   = False
 ffrac  = False
 fz2o   = False
+fvoron = False
 sg     = None
 
 argv = list( sys.argv )  ## copy list
@@ -36,6 +38,9 @@ if len( argv ) > 1:
             ffrac  = True
         elif a == '--z2o':
             fz2o   = True
+        elif a == '--voron':
+            fz2o   = True  ## always cut by unit cell befor Voronoi
+            fvoron = True
         elif a == '--spgrp':
             n  = int( argv.pop() )
             ns = int( argv.pop() )
@@ -60,12 +65,22 @@ if fz2o:
         res[ k ] = u.rep.frac2dec( res[ k ] )
     u.atoms = res
 
+
+if fvoron:
+    u = u * 1  ## expand in all directions by 1
+    vo = Voron( *u.rep )
+    for k,v in u.atoms.iteritems():
+        u.atoms[ k ] = vo.has( v )
+
+
 if fmin:
     u = u.to_min()
+
 
 if fbasis:
     s =  u.rep.to_zell().to_sort()
 
+    ## TODO: need code for 'K3'
     if s.name == 'K1':
         r =  u.rep.minimize()
         if r.v1 * r.v2 > 0:
@@ -83,7 +98,7 @@ if fbasis:
         v3n = ( v1n.vcross( v2n ).norm() ) * v1n.vlen()
 
 
-        u = u * 2  ## extend in all directions by 2
+        u = u * 1  ## extend in all directions by 1
 
         u.rep.v1 = v1n
         u.rep.v2 = v2n
@@ -112,8 +127,17 @@ if sg:  ## need to minimize basis by space group
                 vv.remove( dv )
                 #print '---->', dv
 
-        res[ k ] = u.rep.frac2dec( vv )  ## assign to atom name minimized set of atoms
+        ## now move atoms from basis more closer to origin
+        vvm = []
+        for v in vv:
+            vs = sg * v  ## take orbit of this point
+            vs = u.rep.frac2dec( vs ) ## convert to decart coordinate system
+            vs.sort( key = lambda vt: vt.vlen() )  ## sort by distance
+            vvm.append( vs[ 0 ] )                  ## ... and take nearest
 
-    u.atoms = res
+
+        res[ k ] = vvm  ## assign to atom name new set of atoms
+
+    u.atoms = res  ## full replace set of atoms
 
 print cell2lines( u )
