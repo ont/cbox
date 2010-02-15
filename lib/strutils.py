@@ -56,3 +56,25 @@ def cell2lines( u ):
         s += "\n"
 
     return s
+
+
+
+
+def lines2cells( ls ):
+    def split( ls ):
+        res = []
+        for l in ls:
+            if l != "<<< END":
+                res.append( l )
+            else:
+                yield res
+                res = []
+        yield res
+
+
+    res = []
+    for g in split( ls ):  ## for each group of lines in ls...
+        res.append( lines2cell( g ) )
+
+    return res
+

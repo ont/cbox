@@ -11,11 +11,18 @@ import voron_gl
 import ucell_gl
 
 ls = list( stdlines() )
-u = lines2cell( ls )
 
-v = Voron( *u.rep )
+opts = sys.argv[ 1: ]
+print opts
 
-drawgl( v )
-drawgl( u )
+for i,u in enumerate( lines2cells( ls ) ):
+    v = Voron( *u.rep )
+    if i < len( opts ) :
+        if opts[ i ] == '1':
+            drawgl( u )
+    else:
+        drawgl( u )
+
+    drawgl( v )
 
 drawgl.start()
