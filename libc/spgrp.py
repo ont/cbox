@@ -55,9 +55,14 @@ class SpGrp( object ):
                'F':[ Vec( 0, 0.5, 0.5 ),Vec( 0.5, 0, 0.5 ), Vec( 0.5, 0.5, 0 ) ],
                'I':[ Vec( 0.5, 0.5, 0.5 ) ],
                'P':[],
-               'R':[]  ##TODO: <<< error  (some coordinate orientation has +(2/3,1/3,1/3),(1/3,2/3,2/3)
              }
-        return vs[ typ ]
+        if typ in vs:
+            return vs[ typ ]
+        elif typ == 'R':
+            if self.snum == 2:
+                return []
+            elif self.snum == 1:
+                return [ Vec( 2/3.0, 1/3.0, 1/3.0 ), Vec( 1/3.0, 2/3.0, 2/3.0 ) ]
 
 
     def __mul__( self, v ):
