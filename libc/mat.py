@@ -1,4 +1,5 @@
-from vec import *
+from vec   import *
+from reper import *
 
 class Mat( object ):
     def __init__( self, *args ):
@@ -61,19 +62,27 @@ class Mat( object ):
     def __mul__( self, other ):
         """ Multiply matrix with vector or matrix.
         """
-        if type( other ) is Vec:
+        if type( other ) is Mat:
+            arr = [ [ 0,0,0 ], [ 0,0,0 ], [ 0,0,0 ] ]
+            for i in xrange( 3 ):
+                for j in xrange( 3 ):
+                    arr[ i ][ j ] = sum( ( self[ i ][ k ] * other[ k ][ j ] for k in xrange( 3 ) ) )
+            return Mat( *(arr[ 0 ] + arr[ 1 ] + arr[ 2 ]) )
+
+        elif type( other ) is Vec:
             v = other
             rv = Vec( self.m11 * v[0] + self.m12 * v[1] + self.m13 * v[2],
                       self.m21 * v[0] + self.m22 * v[1] + self.m23 * v[2],
                       self.m31 * v[0] + self.m32 * v[1] + self.m33 * v[2] )
             return rv
 
-        elif type( other ) is Mat:
-            arr = [ [ 0,0,0 ], [ 0,0,0 ], [ 0,0,0 ] ]
-            for i in xrange( 3 ):
-                for j in xrange( 3 ):
-                    arr[ i ][ j ] = sum( ( self[ i ][ k ] * other[ k ][ j ] for k in xrange( 3 ) ) )
-            return Mat( *(arr[ 0 ] + arr[ 1 ] + arr[ 2 ]) )
+        elif type( other ) is Reper:
+            v = other
+            rr = Reper( self.m11 * v[0] + self.m12 * v[1] + self.m13 * v[2],
+                        self.m21 * v[0] + self.m22 * v[1] + self.m23 * v[2],
+                        self.m31 * v[0] + self.m32 * v[1] + self.m33 * v[2] )
+            return rr
+
 
 
     def __hash__( self ):
