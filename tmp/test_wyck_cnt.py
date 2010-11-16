@@ -19,20 +19,39 @@ ans =\
   226 : [8,8,24,24],
   230 : [16,16,24,24] }
 
-for n in (15,70,111,123,133,148,200,209,212,222,225,226):
-    for ns in xrange( len( SpGrp.data[ n-1 ] ) ):
-        s = SpGrp( n, ns+1 )
-        lens = map( len, s.wyckiter() )
-        print s, '--->', lens, ans[n] == lens
+#for n in (15,70,111,123,133,148,200,209,212,222,225,226):
+#    for ns in SpGrp.subs( n ):
+#        s = SpGrp( n, ns )
+#        if s.mydata['inv']:
+#            print "YES"
+#        lens = map( len, s.wyckpos() )
+#        if ans[n] != lens:
+#            print s, '--->', lens, ans[n] == lens
 
-s = SpGrp( 166, 1 )
-lens = map( len, s.wyckiter() )
-print s,'--->', lens   #TODO: must be [3,3,9,9] because of centering
-print s.mydata
+
 #print s.gens2set( list( s ) )
 
-s = SpGrp( 166, 2 )
-lens = map( len, s.wyckiter() )
-print s,'--->', lens
-print s.mydata
 
+s = SpGrp( 67, 6 )
+print s.mydata['symb']
+print s.mydata['inv']
+print 'wpos -->', map( len, s.wyckpos() )
+print 'worb -->', map( len, s.wyckorb() )
+print 'wstab -->', map( lambda s: len(s[0]), s.wyckstab() )
+print 'wstab () -->', map( lambda s: ( len(s[0]), len(s[1]) ), s.wyckstab() )
+
+for n in xrange( 1, 231 ):
+    for ns in SpGrp.subs( n ):
+        s = SpGrp( n, ns )
+        #print "( %s, %s )" % ( n, ns )
+        for t, p in zip( s.wyckstab(), s.wyckpos() ):
+            ws, wsmy = t
+            if wsmy and len( ws ) != len( wsmy ) and not s.cvecs() and s.mydata['symb'][0] != 'B':
+                print "------------"
+                print s
+                print map( len, t )
+                print 'pos = ', p
+                print '--not my--'
+                print t[ 0 ]
+                print '--my--'
+                print t[ 1 ]

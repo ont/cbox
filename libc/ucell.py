@@ -1,6 +1,7 @@
 import math
 import reper_abc
 
+from vec   import Vec
 from reper import Reper
 
 
@@ -44,11 +45,20 @@ class UCell( object ):
     def __add__( self, obj ):
         """ Translate ucell by obj
         """
-        nc = UCell( self.rep )
-        for k,vs in self.atoms.iteritems():
-            vs = map( lambda v: v + obj, vs )  ## translate vectors
-            nc.add( k, vs )
-        return nc
+        if type( obj ) is Vec:
+            nc = UCell( self.rep )
+            for k,vs in self.atoms.iteritems():
+                vs = map( lambda v: v + obj, vs )  ## translate vectors
+                nc.add( k, vs )
+            return nc
+        elif type( obj ) is UCell:
+            nc = UCell( self.rep )
+            nc.atoms = dict( self.atoms ) ## make copy of self atoms
+
+            for k,v in obj.atoms.iteritems():
+                nc.atoms[ k ] = nc.atoms.get( k, [] ) + v ## add extended set of atoms
+
+            return nc
 
 
     def __repr__( self ):

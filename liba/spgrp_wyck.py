@@ -98,28 +98,81 @@ deg0 ={
   62 :  ("1/2" , "1/2" , "3/4") }
 
 
-def wyckiter( self ):
+def digitlist(value, numdigits=8, base=2):
+    """ this is snipped from web ;)
+    """
+    val = value
+    digits = [0 for i in range(numdigits)]
+    for i in range(numdigits):
+        val, digits[i] = divmod(val, base)
+    return digits
+
+
+def wyckstab( self ):
+    """ Return wyckoff position full
+        subgroup of stabilizers.
+    """
+    for w in self.mydata['wyck']:
+        dl = digitlist( w[ 1 ], len( self ) + 1 )      ## len( self ) == count of symm elems
+        ops = []
+        for i,e in enumerate( self ):  ## enumerate all symm elements
+            if not dl[ i ]:
+                ops.append( e )
+
+        ## TODO: error for I * (0.5, 0.0, 0.0) ---> (-0.5, 0.0, 0.0) ---> (0.5,0.0,0.0)
+        if w[ 0 ] in deg0.keys():
+            xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
+            wv = Vec( *xyz )  ## wyckoff vec
+            if self.mydata['inv'] and ( self[ -1 ][ 0 ] * wv ).z2o() == wv:  ## append inversion to operations
+                ops.append( self[ -1 ] )
+
+        ops = self.gens2set( ops )
+
+
+        ## test operations by hands
+        ops_h = []
+        if w[ 0 ] in deg0.keys():
+            xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
+            wv = Vec( *xyz )  ## wyckoff vec
+            for e in self.full():
+                if ( e[ 0 ] * wv + e[ 1 ] ).z2o() == wv:
+                    ops_h.append( e )
+            ops_h = self.gens2set( ops_h )
+
+        yield ( ops, ops_h )
+
+
+
+def wyckorb( self ):
+    """ Return subgroup wich will orbit
+        wyckoff position in unit cell.
+    """
+    for w in self.mydata['wyck']:
+        dl = digitlist( w[ 1 ], len( self ) + 1 ) ## len( self ) == count of symm elems
+        ops = []
+        for i,e in enumerate( self ):  ## enumerate all symm elements
+            if dl[ i ]:
+                ops.append( e )
+
+        ## TODO: error for I * (0.5, 0.0, 0.0) ---> (-0.5, 0.0, 0.0) ---> (0.5,0.0,0.0)
+        if self.mydata['inv'] and w[ 0 ] != 1:  ## append inversion to operations
+            ops.append( self[ -1 ] )
+
+        ops = self.gens2set( ops )
+        yield ops
+
+
+
+def wyckpos( self ):
     """ Return iterator over all wyckoff positions.
     """
-
-    def digitlist(value, numdigits=8, base=2):
-        """ this is snipped from web ;)
-        """
-        val = value
-        digits = [0 for i in range(numdigits)]
-        for i in range(numdigits):
-            val, digits[i] = divmod(val, base)
-        return digits
-
-
     #print 'self', '------------>', list( self )
     ns = ('a','b','c','d','e','f','g','h','i','j','k','l','m','n')
-    for w,n in zip( self.mydata['wyck'], ns ):
+    for w, ops in zip( self.mydata['wyck'], self.wyckorb() ):
         if w[ 0 ] in deg0.keys():
             xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
             wv = Vec( *xyz )  ## wyckoff vec
 
-            dl = digitlist( w[ 1 ], len( self ) + 1 )      ## len( self ) == count of symm elems
             #dl.reverse()
             #print '-------new-------'
             #print 'w =', w
@@ -129,21 +182,6 @@ def wyckiter( self ):
             #print 'self', '------------>', list( self )
 
 
-            #print '--(1)-- enumerate( self )'
-            ops = []
-            for i,e in enumerate( self ):  ## enumerate all symm elements
-                if dl[ i ]:
-                    ops.append( e )
-
-            if self.mydata['inv']:         ## append inversion to operations
-                ops.append( self[ -1 ] )
-
-
-            #print 'ops before = ', len( ops )
-            #print 'ops before = ', ops
-            #print '--(2)-- ops = gens2set( .. )'
-            ops = self.gens2set( ops )
-            #print 'ops after = ', len( ops )
 
             res = set()
             res.add( wv )
@@ -167,9 +205,10 @@ def wyckiter( self ):
 
             yield list( res )
         else:
-            #print "none :(", w
-            pass
+            yield []
 
 
 import spgrp
-spgrp.SpGrp.wyckiter = wyckiter
+spgrp.SpGrp.wyckpos = wyckpos
+spgrp.SpGrp.wyckorb = wyckorb
+spgrp.SpGrp.wyckstab = wyckstab

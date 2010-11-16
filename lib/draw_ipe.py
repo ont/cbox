@@ -2,7 +2,9 @@ from ipe  import *
 from vec  import *
 from math import *
 
-from lxml import etree as ET
+from xml import etree as ET
+#from xml.etree.ElementTree import ElementTree as 
+
 
 
 class DrawIPE( object ):

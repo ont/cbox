@@ -61,7 +61,7 @@ if ffrac:  ## convert to decart basis
 if fz2o:
     res = {}
     for k,vv in u.atoms.iteritems():
-        res[ k ] = map( lambda v: v.z2o(), u.rep.dec2frac( vv ) )
+        res[ k ] = set( map( lambda v: v.z2o(), u.rep.dec2frac( vv ) ) )
         res[ k ] = u.rep.frac2dec( res[ k ] )
     u.atoms = res
 
