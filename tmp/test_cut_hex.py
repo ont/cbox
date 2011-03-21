@@ -1,5 +1,5 @@
-import psyco
-psyco.full()
+#import psyco
+#psyco.full()
 
 import sys
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
@@ -170,12 +170,12 @@ def symm( *args ):
     f = open( '/tmp/basis_pcub_pcub.txt', 'w' )
     f.write( "rprim %s %s %s\n      %s %s %s\n      %s %s %s\n" % ( tuple( r[0] ) + tuple( r[1] ) + tuple( r[2] ) )  )
     f.write( '-----------\n' )
-    for v in ucm.pnts['A']:
+    for v in ucm.atoms['A']:
         f.write( "%s %s %s\n" % tuple( r.dec2frac( v ) ) )
         drawgl( v )
 
     f.write( '-----------\n' )
-    for v in ucm.pnts['B']:
+    for v in ucm.atoms['B']:
         f.write( "%s %s %s\n" % tuple( r.dec2frac( v ) ) )
         drawgl( v, r = 0.1, color = (1,0,0) )
     f.close()
@@ -193,10 +193,10 @@ def view2ipe( *args ):
     import math
     drawipe.clear()
 
-    for v in ucm.pnts['A']:
+    for v in ucm.atoms['A']:
         drawipe( v )
 
-    for v in ucm.pnts['B']:
+    for v in ucm.atoms['B']:
         drawipe( v, r = 0.1, color = (1,0,0) )
 
     for v in ucm.rep:
@@ -222,8 +222,8 @@ def sel( obj ):
 
 nelem = 0
 def symmtest( *args ):
-    basisA = ucm.rep.dec2frac( ucm.pnts['A'] )
-    basisB = ucm.rep.dec2frac( ucm.pnts['B'] )
+    basisA = ucm.rep.dec2frac( ucm.atoms['A'] )
+    basisB = ucm.rep.dec2frac( ucm.atoms['B'] )
     print len( basisA )
     basisA = set( basisA )
     basisA.remove( Vec( 0.0, 0.0, 0.0 ) )

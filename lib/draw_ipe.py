@@ -2,8 +2,8 @@ from ipe  import *
 from vec  import *
 from math import *
 
-from xml import etree as ET
-#from xml.etree.ElementTree import ElementTree as 
+#from xml import etree as ET
+from xml.etree import ElementTree as ET
 
 
 
@@ -19,6 +19,7 @@ class DrawIPE( object ):
     def setup( self, al, th, dist, ang = 40 ):
         self.al, self.th, self.tg = al, th, tan( ang * pi / 180.0 )
         self.dist = dist
+        self.ortho = False
 
 
     def setup_plane( self, p, d ):
@@ -27,6 +28,31 @@ class DrawIPE( object ):
         self.th =  atan2( n.z, sqrt( n.x**2 + n.y**2 ) ) + pi / 2
         self.al = -atan2( n.y, n.x )
         self.ortho = True
+
+
+    def setup_drawgl( self, drawgl ):
+        self.setup( drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl2( self, drawgl ):
+    #    self.setup( -drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl3( self, drawgl ):
+    #    self.setup( drawgl.gl.alpha * pi / 180, -drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl4( self, drawgl ):
+    #    self.setup( -drawgl.gl.alpha * pi / 180, -drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl5( self, drawgl ):
+    #    self.setup( drawgl.gl.theta * pi / 180, drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl6( self, drawgl ):
+    #    self.setup( -drawgl.gl.theta * pi / 180, drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl7( self, drawgl ):
+    #    self.setup( drawgl.gl.theta * pi / 180, -drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
+
+    #def setup_drawgl8( self, drawgl ):
+    #    self.setup( -drawgl.gl.theta * pi / 180, -drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
 
 
     def proj( self, v ):
@@ -44,6 +70,8 @@ class DrawIPE( object ):
         yn = s_al * x + c_al * y
         zn = -c_al * s_th * x + s_al * s_th * y + c_th * z + self.dist
 
+        #xn, yn, zn = yn, zn, -xn
+        #print xn, yn, zn
 
         if self.ortho:
             return Vec( xn, yn, zn )

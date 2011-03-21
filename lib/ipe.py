@@ -1,7 +1,7 @@
 from numpy import mat, matrix
 from math  import sin, cos, sqrt
-from xml  import etree as ET
-#from lxml  import etree as ET
+#from xml  import etree as ET
+from xml.etree import ElementTree as ET
 
 
 class Mark( object ):
@@ -123,7 +123,8 @@ class Painter( object ):
             o.saveXML( page )
 
         tree = ET.ElementTree( root )
-        tree.write( fname, pretty_print = True )
+        #tree.write( fname, pretty_print = True )  ## woot ???  havn't pretty_print ??
+        tree.write( fname )
 
 
 

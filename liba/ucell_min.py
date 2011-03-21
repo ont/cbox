@@ -13,7 +13,7 @@ def to_min( self ):
     ext = self * 1  ## extend in all directions by 1
 
     mps = min( self.atoms.values(), key = lambda l: len( l ) )  ## "minimal points"
-                                                               ## this is minimal group of points
+                                                                ## this is minimal group of points
     mps = list( mps )  ## convert set() to ordered list()
 
     #print "minimal points = ", mps
