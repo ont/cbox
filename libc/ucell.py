@@ -6,11 +6,17 @@ from reper import Reper
 
 
 class UCell( object ):
-    def __init__( self, *args ):
+    def __init__( self, *args, **kargs ):
         if len( args ) == 6:
             a,b,c, alpha, beta, gamma = args
-            self.rep = Reper.from_abc( a,b,c, alpha, beta, gamma )
+            if kargs.get('indeg', False):
+                self.rep = Reper.from_abc( a,b,c, alpha * math.pi / 180.0, beta * math.pi / 180.0, gamma * math.pi / 180.0 )
+            else:
+                self.rep = Reper.from_abc( a,b,c, alpha, beta, gamma )
+        elif len( args ) == 9:
+            self.rep = Reper( Vec( *args[0:3] ), Vec( *args[3:6] ), Vec( *args[6:9] ) )
         else:
+            assert args[ 0 ] is Reper
             self.rep = args[ 0 ]
 
         self.atoms = {}
