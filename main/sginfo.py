@@ -1,14 +1,43 @@
 #!/usr/bin/env python2
 import sys
+import argparse
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
 
 from spgrp import *
 
-if len( sys.argv ) < 3:
-    print "Usage: spinfo.py [num], [snum]"
+p = argparse.ArgumentParser( description = 'Spage group information retriever' )
+p.add_argument( '--sym', metavar = 'NAME', help = 'view info by space group name (for example  "F m -3 m")' )
+p.add_argument( 'num'  , type=int, nargs = '?', default = None, help = 'main number of space group' )
+p.add_argument( 'snum' , type=int, nargs = '?', default = None, help = 'origin and orientation choice number' )
+
+args = p.parse_args()
+if not args.num and not args.snum and not args.sym:
+    p.print_usage()
     exit( 1 )
 
-s = SpGrp( *map( int, sys.argv[ 1: ] ) )
-print s
-print s.mydata
-print 'cvecs:', s.cvecs()
+def info( s ):
+    print '--------------[basic   ]--------------'
+    print s
+    print 'additional non-lattice translational vectors:', s.cvecs()
+    print 'count of generators:', len( s )
+    for i,o in enumerate( s ):
+        print '---- generator #%s:' % i,
+        print o[ 0 ], o[ 1 ], '\n'
+    print '--------------[metadata]--------------'
+    print s.mydata
+
+if args.snum:
+    s = SpGrp( args.num, args.snum )
+    info( s )
+
+elif args.num:
+    for sn,g in enumerate( SpGrp.data[ args.num-1 ] ):
+        print 'origin/orientation (%s) -- %s' % ( sn + 1, g['symb'] )
+
+elif args.sym:
+    for n,gs in enumerate( SpGrp.data ):
+        for sn,g in enumerate( gs ):
+            if g['symb'] == args.sym:
+                s = SpGrp( n+1, sn+1 )
+                info( s )
+
