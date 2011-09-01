@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 import sys
 from struct import pack
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
