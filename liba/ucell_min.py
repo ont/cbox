@@ -7,10 +7,13 @@ import reper_coord
 import vec_z2o
 
 def to_min( self ):
-    rep = self.rep  ## alias
+    decart = self.decart
+
+    self.to_decart() ## transform coordinates to decart basis
+    rep = self.rep   ## alias
     near = {}
 
-    ext = self * 1  ## extend in all directions by 1
+    ext = self * 1   ## extend in all directions by 1
 
     mps = min( self.atoms.values(), key = lambda l: len( l ) )  ## "minimal points"
                                                                 ## this is minimal group of points
@@ -28,8 +31,8 @@ def to_min( self ):
             dr = mps[i] - mps[j]  ## vec to translate
             uct = self + dr       ## translated ucell
 
-            eqv = True  ## translate equiv or not
-            for k,vs in uct.atoms.iteritems():
+            eqv = True         ## translate equiv or not
+            for k,vs in uct:   ## for each groups of atoms...  (k = group name, vs = list of positions)
                 if not vs.issubset( ext.atoms[ k ] ):  ## some points not intersected with others
                     eqv = False
                     break
@@ -78,7 +81,7 @@ def to_min( self ):
     #    drawgl( v, style="line", color=(0,1,0) )
     #print '--[3]-- reduce ucell'
 
-    uc   = UCell( nrep )
+    uc   = UCell( nrep, decart = True )  ## all atoms in decart coordinate system
 
     ## reduce basis
     for k,vs in self.atoms.iteritems():
@@ -88,6 +91,10 @@ def to_min( self ):
         vsn = nrep.frac2dec( vsn )
         uc.add( k, vsn )
 
+
+    if not decart:
+        self.to_fract()  ## restore state of ucell
+        uc.to_fract()    ## convert answer to the same coordinate system
 
     return uc
     #for v in ext.atoms['K']:

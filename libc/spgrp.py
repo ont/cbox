@@ -12,6 +12,10 @@ class SpGrp( object ):
                   ##                         wyck =  wyckoff positions
                   ##                         gens =  generators ( type, (x,y,z) )
 
+    syns = { (140,1): ['I 4/m c m'],
+             (167,2): ['R -3 c R' ],
+             (221,1): ['P m -3 m' ] }
+    #syns = { 'I 4/m 2/c 2/m' : ['I 4/m c m'] }  ## this is mainly for ICSD (ICSD use slightly different notation for groups)
     genr = None   ## all matrices for generators
 
     def __init__( self, num, snum ):
@@ -20,18 +24,27 @@ class SpGrp( object ):
         self.mydata = self.data[ self.num-1 ][ self.snum-1 ]
 
         self.gens = self.mydata['gens']
-        self.gens.append( ( 0, (0.0, 0.0, 0.0) ) )
+
+        e_op = ( 0, (0.0, 0.0, 0.0) )  ## identical with Mat( 1,0,0, 0,1,0, 0,0,1 )
+        e_in = ( 1, (0.0, 0.0, 0.0) )  ## inversion with Mat(-1,0,0, 0,-1,0, 0,0,-1 )
+        if e_op not in self.gens:
+            self.gens.append( e_op )
+
         self.gens.reverse()
-        if self.mydata['inv']:
-            self.gens.append( ( 1, (0.0, 0.0, 0.0) ) )
+        if self.mydata['inv'] and e_in not in self.gens:
+            self.gens.append( e_in )
 
 
     def __len__( self ):
         return len( self.gens )
 
+    def __getattr__( self, n ):
+        if n not in self.__dict__:
+            return self.mydata[ n ]
+        else:
+            return self.__dict__[ n ]
 
     def __getitem__( self, n ):
-
         e = self.gens[ n ]
         m = self.genr[ e[0] ]
         t =  Vec( *e[1] )
@@ -42,6 +55,17 @@ class SpGrp( object ):
     def subs( klas, num ):
         return xrange( 1, len( klas.data[ num-1 ] ) + 1 )
 
+    @classmethod
+    def from_symb( klas, symb ):
+        for n, gs in enumerate( klas.data ):
+            for sn, g in enumerate( gs ):
+                if g['symb'] == symb:
+                    return SpGrp( n + 1, sn + 1 )
+
+                ## test for synonyms...
+                for n_sn, ss in klas.syns.iteritems():
+                    if symb in ss:
+                        return SpGrp( n_sn[ 0 ], n_sn[ 1 ] )
 
     def cvecs( self ):
         """ Return centering vectors for this space group.
@@ -106,7 +130,8 @@ class SpGrp( object ):
 import os, pickle
 pdir = os.path.dirname( __file__ )
 
-SpGrp.data = pickle.load( open(  os.path.join( pdir , 'spgrp.pkl' ), 'rb' ) )
+if not SpGrp.data:
+    SpGrp.data = pickle.load( open(  os.path.join( pdir , 'spgrp.pkl' ), 'rb' ) )
 
 SpGrp.genr = [
         Mat(  1,  0,  0,
