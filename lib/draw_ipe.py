@@ -1,5 +1,6 @@
 from ipe  import *
 from vec  import *
+from mat  import *
 from math import *
 
 #from xml import etree as ET
@@ -31,52 +32,28 @@ class DrawIPE( object ):
 
 
     def setup_drawgl( self, drawgl ):
-        self.setup( drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl2( self, drawgl ):
-    #    self.setup( -drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl3( self, drawgl ):
-    #    self.setup( drawgl.gl.alpha * pi / 180, -drawgl.gl.theta * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl4( self, drawgl ):
-    #    self.setup( -drawgl.gl.alpha * pi / 180, -drawgl.gl.theta * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl5( self, drawgl ):
-    #    self.setup( drawgl.gl.theta * pi / 180, drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl6( self, drawgl ):
-    #    self.setup( -drawgl.gl.theta * pi / 180, drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl7( self, drawgl ):
-    #    self.setup( drawgl.gl.theta * pi / 180, -drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
-
-    #def setup_drawgl8( self, drawgl ):
-    #    self.setup( -drawgl.gl.theta * pi / 180, -drawgl.gl.alpha * pi / 180, drawgl.gl.dist )
+        self.setup( drawgl.gl.alpha * pi / 180 + pi, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
 
 
     def proj( self, v ):
-        c_al = cos( self.al )
-        s_al = sin( self.al )
-        c_th = cos( self.th )
-        s_th = sin( self.th )
+        m_y = Mat(  cos( -self.al ) ,  0, sin( -self.al ),
+                    0               ,  1, 0              ,
+                   -sin( -self.al ) ,  0, cos( -self.al ) )
 
-        x,y,z = list( v + self.pos )
-        xn = c_al*x - s_al*y
-        yn = c_th*( c_al*y + s_al*x ) - s_th*z
-        zn = c_th*z + s_th*( c_al*y + s_al*x ) + self.dist
+        m_x = Mat( 1,  0               , 0                ,
+                   0,  cos( -self.th ) , -sin( -self.th ) ,
+                   0,  sin( -self.th ) ,  cos( -self.th ) )
 
-        xn = c_al * c_th * x - s_al * c_th * y + s_th * z
-        yn = s_al * x + c_al * y
-        zn = -c_al * s_th * x + s_al * s_th * y + c_th * z + self.dist
-
-        #xn, yn, zn = yn, zn, -xn
-        #print xn, yn, zn
+        v = v + self.pos
+        v = m_y * v
+        v = m_x * v
+        v.z += self.dist
 
         if self.ortho:
-            return Vec( xn, yn, zn )
+            return v
         else:
-            return Vec( xn/zn * 200 / self.tg, yn/zn * 200 / self.tg, zn )
+            return Vec( v.x/v.z * 400 / self.tg, v.y/v.z * 400 / self.tg, v.z )
+
 
 
     def trans( self, v ):
