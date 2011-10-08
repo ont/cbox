@@ -12,7 +12,8 @@ class SpGrp( object ):
                   ##                         wyck =  wyckoff positions
                   ##                         gens =  generators ( type, (x,y,z) )
 
-    syns = { (140,1): ['I 4/m c m'],
+    syns = { (139,1): ['I 4/m m m'],
+             (140,1): ['I 4/m c m'],
              (167,2): ['R -3 c R' ],
              (221,1): ['P m -3 m' ] }
     #syns = { 'I 4/m 2/c 2/m' : ['I 4/m c m'] }  ## this is mainly for ICSD (ICSD use slightly different notation for groups)
@@ -23,7 +24,7 @@ class SpGrp( object ):
         self.snum = snum
         self.mydata = self.data[ self.num-1 ][ self.snum-1 ]
 
-        self.gens = self.mydata['gens']
+        self.gens = list( self.mydata['gens'] )
 
         e_op = ( 0, (0.0, 0.0, 0.0) )  ## identical with Mat( 1,0,0, 0,1,0, 0,0,1 )
         e_in = ( 1, (0.0, 0.0, 0.0) )  ## inversion with Mat(-1,0,0, 0,-1,0, 0,0,-1 )
