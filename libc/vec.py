@@ -80,7 +80,9 @@ class Vec( object ):
             return False
 
     def __repr__( self ):
-        return "Vec( %s, %s, %s )" % ( self.x, self.y, self.z )
+        return "Vec( %s, %s, %s )" % ( 0 if abs( self.x ) < 0.0001 else self.x,
+                                       0 if abs( self.y ) < 0.0001 else self.y,
+                                       0 if abs( self.z ) < 0.0001 else self.z )
 
 
 #v = Vec( 1, 1 )
