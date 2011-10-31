@@ -61,11 +61,13 @@ class UCell( object ):
     def __mul__( self, o ):
         """ Multiply ucell with number and space group
         """
+        decart = self.decart
+        self.to_decart()
         if type( o ) is int:
             ns = [ (i,j,k) for i in xrange( -o, o+1 )\
                            for j in xrange( -o, o+1 )\
                            for k in xrange( -o, o+1 ) ]
-            uc = UCell( self.rep )
+            uc = UCell( self.rep, decart = True )
 
             for k,vs in self.atoms.iteritems():
                 toadd = set()
@@ -73,8 +75,10 @@ class UCell( object ):
                     vt = self.rep * t
                     for v in vs:              ## for each vector with name "k"
                         toadd.add( v + vt )   ## translate v by reper in each directions
-                uc.add( k, toadd )  ## add extended points with name "k"
+                uc.add( k, toadd )            ## add extended points with name "k"
 
+            if not decart:
+                uc.to_fract()
             return uc
 
         elif type( o ) == SpGrp:
@@ -114,5 +118,5 @@ class UCell( object ):
         bet = math.acos( rep[0].norm() * rep[2].norm() ) * 180 / math.pi
         alf = math.acos( rep[1].norm() * rep[2].norm() ) * 180 / math.pi
 
-        return "UCell( a,b,c = (%s, %s, %s)  angles = (%s, %s, %s) )" % ( a,b,c, alf, bet, gam )
+        return "UCell( a,b,c = (%s, %s, %s)  angles = (%s, %s, %s)  atoms = '%s' )" % ( a,b,c, alf, bet, gam, map( lambda t: "%s(%s)" % (t[0], len( t[1] )), self ) )
 
