@@ -98,6 +98,9 @@ class Mat( object ):
                 return False
         return True
 
+    def __ne__( self, other ):
+        return not self.__eq__( other )
+
 
     def __repr__( self ):
         return "\nM(%3s %3s %3s\n  %3s %3s %3s\n  %3s %3s %3s )\n" % ( self.m11, self.m12, self.m13, self.m21, self.m22, self.m23, self.m31, self.m32, self.m33 )

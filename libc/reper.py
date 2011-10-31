@@ -19,3 +19,5 @@ class Reper( object ):
     def __repr__( self ):
         return 'reper( %s,%s,%s )' % ( self.v1, self.v2, self.v3 )
 
+    def __eq__( self, other ):
+        return self.v1 == other.v1 and self.v2 == other.v2 and self.v3 == other.v3
