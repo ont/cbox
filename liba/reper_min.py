@@ -1,4 +1,7 @@
+from zell  import Zell
 from reper import Reper
+
+import reper2zell
 
 def minimize( self ):
     """ Reduce reper to 3 minimal vector.
@@ -26,7 +29,27 @@ def minimize( self ):
     return Reper( *vs )
 
 
+def norm( self ):
+    """ Reduce & make all zelling args negative.
+    """
+    vs = [ self.v1, self.v2, self.v3, ( self.v1 + self.v2 + self.v3 ) * -1 ]
+
+    f = True
+    while f:
+        f = False
+        for i, v1 in enumerate( vs ):
+            for j, v2 in enumerate( vs ):
+                if i != j and v1 * v2 > 0.0001:
+                    for k in xrange( 4 ):
+                        if k != i and k != j:
+                            vs[ k ] += v1      ## add v1 to all, except v1 and v2
+                    vs[ i ] *= -1              ## v1 --> -v1
+                    v1 *= -1                   ## also correct cycle var
+                    f = True
+
+    return Reper( vs[0], vs[1], vs[2] )
 
 
 import reper
 reper.Reper.minimize = minimize
+reper.Reper.norm     = norm
