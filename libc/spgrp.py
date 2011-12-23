@@ -15,7 +15,36 @@ class SpGrp( object ):
     syns = { (139,1): ['I 4/m m m'],
              (140,1): ['I 4/m c m'],
              (167,2): ['R -3 c R' ],
-             (221,1): ['P m -3 m' ] }
+             (198,1): ['P 21 3'   ],
+             (199,1): ['I 21 3'   ],
+             (200,1): ['P m -3'   ],
+             (201,1): ['P n -3 S' ],
+             (201,2): ['P n -3 Z' ],
+             (202,1): ['F m -3'   ],
+             (203,1): ['F d -3 S' ],  ## untested !
+             (203,2): ['F d -3 Z' ],  ## untested !
+             (204,1): ['I m -3'   ],
+             (205,1): ['P a -3'   ],
+             (206,1): ['I a -3'   ],
+             (208,1): ['P 42 3 2' ],
+             (210,1): ['F 41 3 2' ],
+             (212,1): ['P 43 3 2' ],
+             (213,1): ['P 41 3 2' ],
+             (214,1): ['I 41 3 2' ],
+             (221,1): ['P m -3 m' ],
+             (222,1): ['P n -3 n S' ], ## untested !
+             (222,2): ['P n -3 n Z' ], ## untested !
+             (223,1): ['P m -3 n' ],
+             (224,1): ['P n -3 m S'], ## untested !
+             (224,2): ['P n -3 m Z'], ## untested !
+             (225,1): ['F m -3 m' ],
+             (226,1): ['F m -3 c' ],
+             (227,1): ['F d -3 m S' ],
+             (227,2): ['F d -3 m Z' ],
+             (228,1): ['F d -3 c S' ], ## untested !
+             (228,2): ['F d -3 c Z' ], ## untested !
+             (229,1): ['I m -3 m' ],
+             (230,1): ['I a -3 d' ], }
     #syns = { 'I 4/m 2/c 2/m' : ['I 4/m c m'] }  ## this is mainly for ICSD (ICSD use slightly different notation for groups)
     genr = None   ## all matrices for generators
 
@@ -41,6 +70,8 @@ class SpGrp( object ):
 
     def __getattr__( self, n ):
         if n not in self.__dict__:
+            if 'mydata' not in self.__dict__ or n not in self.mydata:
+                raise AttributeError, "can't found attribute"
             return self.mydata[ n ]
         else:
             return self.__dict__[ n ]
@@ -51,6 +82,11 @@ class SpGrp( object ):
         t =  Vec( *e[1] )
         return ( m, t )
 
+    def __hash__( self ):
+        return hash( ( self.num, self.snum ) )
+
+    def __eq__( self, other ):
+        return self.num == other.num and self.snum == other.snum
 
     @classmethod
     def subs( klas, num ):
@@ -204,6 +240,10 @@ SpGrp.genr = [
 if __name__ == "__main__":
     print SpGrp.data[ 224 ][ 0 ]
     s = SpGrp( 225, 1 )
+    s2 = SpGrp( 225, 1 )
+    print id( s ), id( s2 )
+    print s == s2
+    exit( 0 )
     print len( s * Vec( 0.25, 0.25, 0.25 ) )
 
     l = set()
