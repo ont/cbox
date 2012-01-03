@@ -33,7 +33,12 @@ class UCell( object ):
         self.atoms[ name ] = set( atoms )
 
     def __getitem__( self, n ):
-        return self.atoms.get( n, [] )
+        if n in self.atoms:
+            return self.atoms[ n ]
+        else:
+            res = []
+            self.atoms[ n ] = res
+            return res
 
     def __setitem__( self, n, v ):
         self.atoms[ n ] = v
