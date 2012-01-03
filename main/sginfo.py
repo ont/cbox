@@ -4,6 +4,7 @@ import argparse
 sys.path.extend( [ '../lib', '../liba', '../libc' ] )
 
 from spgrp import *
+import spgrp_wyck
 
 p = argparse.ArgumentParser( description = 'Spage group information retriever' )
 p.add_argument( '--sym', metavar = 'NAME', help = 'view info by space group name (for example  "F m -3 m")' )
@@ -25,6 +26,9 @@ def info( s ):
         print o[ 0 ], o[ 1 ], '\n'
     print '--------------[metadata]--------------'
     print s.mydata
+    print '--------------[wyck pos]--------------'
+    for ws in s.wyckpos():
+        print ws
 
 if args.snum:
     s = SpGrp( args.num, args.snum )
