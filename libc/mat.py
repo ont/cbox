@@ -103,7 +103,7 @@ class Mat( object ):
 
 
     def __repr__( self ):
-        return "\nM(%3s %3s %3s\n  %3s %3s %3s\n  %3s %3s %3s )\n" % ( self.m11, self.m12, self.m13, self.m21, self.m22, self.m23, self.m31, self.m32, self.m33 )
+        return "\nM(%4s %4s %4s\n  %4s %4s %4s\n  %4s %4s %4s )\n" % tuple( map( lambda x: 0 if abs( x ) < 0.0001 else x, ( self.m11, self.m12, self.m13, self.m21, self.m22, self.m23, self.m31, self.m32, self.m33 ) ) )
 
 
 if __name__ == '__main__':

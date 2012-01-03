@@ -166,8 +166,9 @@ def wyckorb( self ):
 def wyckpos( self ):
     """ Return iterator over all wyckoff positions.
     """
-    #print 'self', '------------>', list( self )
     ns = ('a','b','c','d','e','f','g','h','i','j','k','l','m','n')
+    #print list( self.wyckorb() )
+    #return
     for w, ops in zip( self.mydata['wyck'], self.wyckorb() ):
         if w[ 0 ] in deg0.keys():
             xyz = map( lambda s: eval( '1.0*' + s ), deg0[ w[ 0 ] ] )
@@ -189,6 +190,10 @@ def wyckpos( self ):
             #print '--(3)-- apply ops'
             for o in ops:
                 res.add( ( o[0] * wv + o[1] ).z2o() )
+
+            #print '-----------'
+            #print w
+            #print ops
 
             #print res
             #print 'before cvecs --->', len( res )

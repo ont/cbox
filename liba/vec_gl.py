@@ -19,6 +19,6 @@ def draw( self, api ):
 import vec
 vec.Vec.draw = draw
 vec.Vec.opt = { 'style' : 'dot',
-                'r'     : 0.03,
+                'r'     : 0.3,
                 'color' : ( 0.8, 0.8, 0.8 ),
                 'start' : vec.Vec( 0,0,0 ) }
