@@ -130,7 +130,7 @@ ucell.UCell.data = {
 def draw( self, api ):
     v1, v2, v3 = self.rep.v1, self.rep.v2, self.rep.v3
     v = v1 + v2 + v3
-    api.gl.dist = 1.5 * v.vlen()
+    #api.gl.dist = 1.5 * v.vlen()
 
     v0 = Vec( 0.0, 0.0, 0.0 )
     api.line( v0, self.rep.v1, (1,1,1) )
