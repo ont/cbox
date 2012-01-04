@@ -7,6 +7,7 @@ from spgrp import SpGrp
 
 ## import aspect for reper
 import reper_coord
+import vec_z2o
 
 class UCell( object ):
     def __init__( self, *args, **kargs ):
@@ -66,9 +67,9 @@ class UCell( object ):
     def __mul__( self, o ):
         """ Multiply ucell with number and space group
         """
-        decart = self.decart
-        self.to_decart()
         if type( o ) is int:
+            decart = self.decart
+            self.to_decart()
             ns = [ (i,j,k) for i in xrange( -o, o+1 )\
                            for j in xrange( -o, o+1 )\
                            for k in xrange( -o, o+1 ) ]
@@ -91,9 +92,9 @@ class UCell( object ):
             for n, ats in self:
                 tmp = set()
                 for a in ats:
-                    for v in o * a:                      ## multiply each atom position with space group
-                        tmp.add( Vec( v.x, v.y, v.z ) )  ## ... and then add it
-                uc[ n ] = list( tmp )                    ## transform to list and save
+                    for v in o * a:        ## multiply each atom position with space group
+                        tmp.add( v )       ## ... and then add it
+                uc[ n ] = list( tmp )      ## transform to list and save
             return uc
 
 
