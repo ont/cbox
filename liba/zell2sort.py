@@ -21,15 +21,17 @@ def to_sort( self ):
 
         for i in xrange( 6 ):
             n = c[ i ]
-            if ( n == 0 and abs( z[ i ] ) > 0.01 ) or\
-               ( n != 0 and abs( z[ i ] ) < 0.01 ):     ## zeroes only on zeores
+            if ( n == 0 and abs( z[ i ] ) > 0.05 ) or\
+               ( n != 0 and abs( z[ i ] ) < 0.05 ):     ## zeroes only on zeores
                 return False
-            elif n != 0 and ( g[ n ] - abs( z[ i ] ) ) / g[ n ] > 0.01:
+            elif n != 0 and ( g[ n ] - abs( z[ i ] ) ) > 0.05:
                 return False
 
         return True
 
     z = self.norm()
+    k = 10.0 / abs( min( z ) )   ## find max value in zell
+    z = [ x * k for x in z ]     ## norm maximal parameter to 10.0
     for name in names:
         for c in zell.Zell.all_cond[ name ]:
             if test( c, z ):
