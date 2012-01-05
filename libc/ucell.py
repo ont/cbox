@@ -26,12 +26,20 @@ class UCell( object ):
         self.atoms = {}
         self.decart = kargs.get( 'decart', False )  ## by default assume that all coordinates of atoms in fractional coordinates
 
-    def add( self, name, atoms ):
+    def add( self, name, x ):
         """ Add a group of named points (atoms)
             to unit cell.
             Points mus be in decart (not fractional) coordinate system.
         """
-        self.atoms[ name ] = set( atoms )
+        if name not in self.atoms:
+            self.atoms[ name ] = set()
+
+        if type( x ) in ( list, set, tuple ):
+            self.atoms[ name ].update( set( x ) )
+        elif type( x ) is Vec:
+            self.atoms[ name ].add( x )
+        else:
+            raise Exception, "type of argument must be list,set,tuple, or single Vec"
 
     def __getitem__( self, n ):
         if n in self.atoms:
