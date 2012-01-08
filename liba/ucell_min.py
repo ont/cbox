@@ -64,10 +64,10 @@ def to_min( self ):
                 v2 = v
                 break
 
-        ## take third shortest wich is not complanar with v1 and v2
+        ## take third shortest wich is not coplanar with v1 and v2
         vc = v1.vcross( v2 )
         for v in eqv_dr:
-            if abs( vc * v ) > 0.001:
+            if abs( vc * v ) > 0.05:
                 v3 = v
                 break
 
