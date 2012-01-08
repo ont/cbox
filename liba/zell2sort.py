@@ -37,7 +37,16 @@ def to_sort( self ):
             if test( c, z ):
                 return Sort( name )
 
-    raise "Whaaaat!?  we can't find sort for %s ???" % self
+    ## hey we are here and this means that we can't
+    ## determine sort (degenerate Zell symbol)
+    print "warn: degenerate Zell symbol! (%s)" % self.norm()
+    z = self.norm()
+    for name in names:
+        for c in zell.Zell.all_cond[ name ]:
+            if test( c, z ):
+                return Sort( name )
+
+    raise Exception, "can't determine sort of Zell symbol! (%s)" % self.norm()
 
 
 zell.Zell.to_sort = to_sort
