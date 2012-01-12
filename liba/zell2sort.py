@@ -39,7 +39,7 @@ def to_sort( self ):
 
     ## hey we are here and this means that we can't
     ## determine sort (degenerate Zell symbol)
-    print "warn: degenerate Zell symbol! (%s)" % self.norm()
+    #print "warn: degenerate Zell symbol! (%s)" % self.norm()
     z = self.norm()
     for name in names:
         for c in zell.Zell.all_cond[ name ]:
