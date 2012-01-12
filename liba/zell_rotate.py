@@ -1,4 +1,4 @@
-from zell import Zell
+import zell
 
 def rotate( self, newpos ):
     """ Return new Delone symbol in one of 24 possible position.
@@ -18,9 +18,8 @@ def rotate( self, newpos ):
     for i in xrange( 6 ):
         res[ i ] = arr[ trans[ newpos % 24 ][ i ] ]
 
-    return Zell( *res )
+    return zell.Zell( *res )
 
 
 
-import zell
 zell.Zell.rotate = rotate

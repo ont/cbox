@@ -15,16 +15,29 @@ class Zell( object ):
         t = ( self.g, self.h, self.k, self.l, self.m, self.n )
         return t[ idx ]
 
+    def __setitem__( self, idx, val ):
+        t = [ self.g, self.h, self.k, self.l, self.m, self.n ]
+        t[ idx ] = val
+        self.g, self.h, self.k, self.l, self.m, self.n = t
+
     def __hash__( self ):
         return 1 ## zell as a vec is not hashable
                  ## see stackoverflow site for this reason int( sum( self ) * 10 )
 
 
     def __eq__( self, other ):
-        tmp = map( lambda t: abs( t[ 0 ] - t[ 1 ] ) < 0.001, zip( self, other ) )  ## how different each pair ?
-        return filter( lambda x: not x, tmp ) == []                                ## does here exists too different ?
+        ## TODO: Zell( 0, 0, 1, 1, 0, 1 ) == Zell( 0, 0, 0, 1, 1, 1 )    (reper --> mininimize --> norm --> zell)
+        for p in xrange( 24 ):
+            z = self.rotate( p )
+            tmp = map( lambda t: abs( t[ 0 ] - t[ 1 ] ) < 0.001, zip( z, other ) )  ## how different each pair ?
+            if filter( lambda x: not x, tmp ) == []:                                ## does here exists too different ?
+                return True
+        return False
 
+    def __ne__( self, other ):
+        return not self.__eq__( other )
 
     def __repr__( self ):
         return "zell( %s %s %s %s %s %s )" % ( self.g, self.h, self.k, self.l, self.m, self.n )
 
+import zell_rotate   ## aspect in main file ?! o.O  (needed by __eq__)
