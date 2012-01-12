@@ -168,9 +168,10 @@ class SpGrp( object ):
         typ = self.mydata['symb'][0]
         ##TODO: find vectors for B and test for A and C and R
         ##TODO: http://img.chem.ucl.ac.uk/sgp/large/146az1.htm
+        ##TODO: http://img.chem.ucl.ac.uk/sgp/large/ortho.htm   << extended list of space groups
         vs = { 'A':[ Vec( 0, 0.5, 0.5 ) ],
+               'B':[ Vec( 0.5, 0, 0.5 ) ],
                'C':[ Vec( 0.5, 0.5, 0 ) ],
-               'B':[], ##TODO: <<< error
                'F':[ Vec( 0, 0.5, 0.5 ),Vec( 0.5, 0, 0.5 ), Vec( 0.5, 0.5, 0 ) ],
                'I':[ Vec( 0.5, 0.5, 0.5 ) ],
                'P':[],
