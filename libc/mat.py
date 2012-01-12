@@ -48,6 +48,10 @@ class Mat( object ):
                     a31, a32, a33 )
 
 
+    def __iter__( self ):
+        for row in xrange( 3 ):
+            yield self[ row ]
+
     def __getitem__( self, row ):
         """ Return matrix elements in 2d array style.
         """
