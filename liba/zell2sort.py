@@ -19,19 +19,25 @@ def to_sort( self ):
             n, v = c[ i ], abs( z[ i ] )
             g[ n ] = max( v, g.get( n, v ) )  ## store in group max possible abs value
 
+        gm = max([ g[ k ] for k in g ])
+        #print gm, g
+
         for i in xrange( 6 ):
             n = c[ i ]
-            if ( n == 0 and abs( z[ i ] ) > 0.05 ) or\
-               ( n != 0 and abs( z[ i ] ) < 0.05 ):     ## zeroes only on zeores
+            if ( n == 0 and abs( z[ i ] ) / gm > 0.001 ) or\
+               ( n != 0 and abs( z[ i ] ) / gm < 0.001 ):     ## zeroes only on zeroes
+                #print 'i = %s  c[ i ] = %s  z[ i ] = %s  abs( z[ i ] ) / gm = %s' % ( i, c[ i ], z[ i ], abs( z[ i ] )/ gm )
                 return False
-            elif n != 0 and ( g[ n ] - abs( z[ i ] ) ) > 0.05:
+            elif n != 0 and ( abs( z[ i ] / g[ n ] ) ) < 0.999:
+                #print 'i = %s  g[ n ] = %s  z[ i ] = %s  abs( z[ i ] / g[ n ] ) = %s' % ( i, g[ n ], z[ i ], abs( z[ i ] / g[ n ] ) )
                 return False
 
         return True
 
     z = self.norm()
-    k = 10.0 / abs( min( z ) )   ## find max value in zell
-    z = [ x * k for x in z ]     ## norm maximal parameter to 10.0
+    #k = 10.0 / abs( min( z ) )   ## find max value in zell
+    #z = [ x * k for x in z ]     ## norm maximal parameter to 10.0
+    #print z
     for name in names:
         for c in zell.Zell.all_cond[ name ]:
             if test( c, z ):
@@ -40,13 +46,7 @@ def to_sort( self ):
     ## hey we are here and this means that we can't
     ## determine sort (degenerate Zell symbol)
     #print "warn: degenerate Zell symbol! (%s)" % self.norm()
-    z = self.norm()
-    for name in names:
-        for c in zell.Zell.all_cond[ name ]:
-            if test( c, z ):
-                return Sort( name )
-
-    raise Exception, "can't determine sort of Zell symbol! (%s)" % self.norm()
+    return Sort( '<degenerate>' )
 
 
 zell.Zell.to_sort = to_sort
