@@ -37,7 +37,13 @@ class Zell( object ):
     def __ne__( self, other ):
         return not self.__eq__( other )
 
+    def __mul__( self, other ):
+        return Zell( *[ other * x for x in self ] )
+
+    def __rmul__( self, other ):
+        return self.__mul__( other )
+
     def __repr__( self ):
-        return "zell( %s %s %s %s %s %s )" % ( self.g, self.h, self.k, self.l, self.m, self.n )
+        return "Zell( %s, %s, %s, %s, %s, %s )" % tuple(( 0 if abs( x ) < 0.0001 else x for x in [ self.g, self.h, self.k, self.l, self.m, self.n ] ))
 
 import zell_rotate   ## aspect in main file ?! o.O  (needed by __eq__)
