@@ -22,11 +22,16 @@ class ICSD( object ):
             returning Cryst instances
         """
         bad = False
-        sp, uc, fats = None, None, False
+        icsd_id, sp, uc, fats = None, None, None, False
         for l in open( self.fname ):
             if "*end for" in l and sp and uc:
-                yield Cryst( sp, uc )
-                sp, uc, fats = None, None, False
+                c = Cryst( sp, uc )
+                c.icsd = icsd_id
+                yield c
+                icsd_id, sp, uc, fats = None, None, None, False
+
+            if "*data for" in l:
+                icsd_id = l.split( '#' )[ 1 ].strip()
 
             if l[ 0:11 ] == "Space Group":
                 sp = SpGrp.from_symb( ' '.join( l.split()[ 2: ] ) )
