@@ -3,6 +3,23 @@ from math  import sin, cos, sqrt
 #from xml  import etree as ET
 from xml.etree import ElementTree as ET
 
+class Label( object ):
+    """ Label -- some text at some pos
+    """
+    def __init__( self, pos, txt ):
+        self.pos = pos
+        self.txt = txt
+
+    def saveXML( self, root ):
+        #<text layer="alpha" transformations="translations" pos="-61.7023 4.7051" stroke="black" type="label" valign="baseline">Hg</text>
+        text = ET.SubElement( root, 'text' )
+        text.set( 'layer', 'alpha' )
+        text.set( 'type' , 'label' )
+        text.set( 'value', 'baseline' )
+        text.set( 'transformations', 'translations' )
+        text.set( "pos", "%f %f" % ( self.pos[ 0 ], self.pos[ 1 ] ) )
+        text.text = self.txt
+
 
 class Mark( object ):
     """ A simple point.
@@ -37,6 +54,8 @@ class Circle( object ):
         path = ET.SubElement( root, "path" )
         path.set( "stroke", self.color )
         path.set( "layer", "alpha" )
+        if self.style is not None:
+            path.set( "dash", self.style )
         path.text = "%s 0 0 %s %s %s e" % ( self.r, self.r, self.pos[ 0 ], self.pos[ 1 ] )
 
 
@@ -105,7 +124,7 @@ class Painter( object ):
         style.set( "name", "basic" )
         dash = ET.SubElement( style, "dashstyle" )
         dash.set( "name", "dashed" )
-        dash.set( "value", "[4] 0" )
+        dash.set( "value", "[2] 0" )
 
         color = ET.SubElement( style, "color" )
         color.set( "name", "black" )

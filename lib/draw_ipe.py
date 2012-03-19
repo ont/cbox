@@ -13,8 +13,9 @@ class DrawIPE( object ):
         self.pos = Vec( 0,0,0 )  ## position for trans
         self.ipe = Painter()
         self.grp = None          ## for usage in self.save
-        self.objs     = [[], ]
-        self.objs_ipe = [[], ]
+        self.objs      = [[], ]  ## generic objects to draw
+        self.objs_ipe  = [[], ]  ## object which are rendered only by ipe drawer
+        self.objs_burn = [[], ]  ## burned object (it doesn't need rendering
 
 
     def setup( self, al, th, dist, ang = 40 ):
@@ -32,7 +33,7 @@ class DrawIPE( object ):
 
 
     def setup_drawgl( self, drawgl ):
-        self.setup( drawgl.gl.alpha * pi / 180 + pi, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+        self.setup( drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
 
 
     def proj( self, v ):
@@ -67,6 +68,8 @@ class DrawIPE( object ):
             self.objs.append( [] )
         if self.objs_ipe[ -1 ]:
             self.objs_ipe.append( [] )
+        if self.objs_burn[ -1 ]:
+            self.objs_burn.append( [] )
 
 
     def line( self, v1, v2, color, **opt ):
@@ -82,12 +85,24 @@ class DrawIPE( object ):
     def sphere( self, pos, r, color, **opt ):
         pos = self.proj( pos )
         #r = r/( pos.z + self.dist ) * 200 / self.tg
-        c = Circle( pos, r )
-        c.color = " ".join( map( lambda a: str( 1-a ), color ) )
+        c = Circle( pos, 10 * r )
+        c.color = " ".join( map( lambda a: str( a ), color ) )
+        c.width = opt.get( 'width', 'normal' )
+        c.style = 'dashed' if opt.get( 'invis', False ) else 'normal'
         self.grp.add( c )
+
+    def text( self, pos, txt ):
+        pos = self.proj( pos )
+        l = Label( pos, txt )
+        self.grp.add( l )
 
 
     def __call__( self, obj, **opt ):
+        if type( obj ) is str and 'pos' in opt:
+            pos = self.proj( opt['pos'] )
+            self.objs_burn[-1].append( Label( pos, obj ) )
+            return
+
         if not hasattr( obj, 'draw' ) and not hasattr( obj, 'draw_ipe' ):
             raise Exception, "Object %s can't be drawn" % obj
 
@@ -103,8 +118,9 @@ class DrawIPE( object ):
 
 
     def clear( self ):
-        self.objs     = [[], ]
-        self.objs_ipe = [[], ]
+        self.objs      = [[], ]
+        self.objs_ipe  = [[], ]
+        self.objs_burn = [[], ]
 
 
     def save( self, fname ):
@@ -117,8 +133,25 @@ class DrawIPE( object ):
                 self.pos = Vec( 0,0,0 )
                 o.draw( self )  ## draw with api
 
+            ## z-order sorting (draw first with greater z-value)
+            def depth( x ):
+                if hasattr( x, 'pos' ):
+                    return x.pos.z
+                elif type( x ) is Span:
+                    vm = 0.5 * ( x.m1.pos + x.m2.pos )
+                    return vm.z
+                else:
+                    return 100000
+
+            self.grp.objs.sort( key = depth, reverse = True )
+
             self.ipe.objs.append( self.grp ) ## send created group to ipe
 
+        for g in self.objs_burn:  ## simply add already rendered objects to tree
+            grp = Group()
+            for o in g:
+                grp.add( o )
+            self.ipe.objs.append( grp ) ## send created group to ipe
 
         for g in self.objs_ipe:
             for o in g:

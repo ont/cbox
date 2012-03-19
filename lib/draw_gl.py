@@ -241,6 +241,10 @@ class DrawGL( object ):
 
 
     def __call__( self, obj, **opt ):
+        if type( obj ) is str and 'pos' in opt:
+            ## TODO: create & add text object
+            return
+
         if not hasattr( obj, 'draw' ) and not hasattr( obj, 'draw_gl' ):
             raise Exception, "Object %s can't be drawn" % obj
 
@@ -253,6 +257,7 @@ class DrawGL( object ):
 
         if hasattr( obj, 'draw_gl' ):      ## obj use special opengl featrues
             self.gl.objs_gl.append( obj )
+
 
         self.gl.queue_draw()
 
@@ -301,15 +306,36 @@ class DrawGL( object ):
         specReflection = ( 0.7, 0.7, 0.7, 1.0 )
         glMaterialfv( GL_FRONT, GL_SPECULAR, specReflection )
 
+        # set visisble/invisible by transparency
+        opt['invis'] = False  ## TODO: transparency sorting ...  (temporary disabling transparency feature)
+        if opt.get( 'invis', False ):
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE )
+            glEnable( GL_BLEND )
+            glDisable( GL_DEPTH_TEST )
+            color = list( color ) + [ 0.2 ]
+            acolor = ( 0.2, 0.2, 0.2, 0.2 )  ## ambient color
+        else:
+            acolor = ( 0.2, 0.2, 0.2 )       ## ambient color
+
+
         # set diffuse & ambient material colors
-        glMaterialfv( GL_FRONT, GL_DIFFUSE, color )
-        glMaterialfv( GL_FRONT, GL_AMBIENT, ( 0.2, 0.2, 0.2 ) )
+        glMaterialfv( GL_FRONT, GL_DIFFUSE, color  )
+        glMaterialfv( GL_FRONT, GL_AMBIENT, acolor )
+
+        #glMaterialfv( GL_FRONT, GL_DIFFUSE, ( 1.0, 0.2, 0.2, 0.5 ) )
+        #glMaterialfv( GL_FRONT, GL_AMBIENT, ( 0.2, 0.2, 0.2, 0.5 ) )
 
         qobj = gluNewQuadric()
         gluSphere( qobj, r, 15, 15 )
 
+        glDisable( GL_BLEND )
+        glEnable( GL_DEPTH_TEST )
+
         glPopMatrix()
 
+    def text( self, pos, txt ):
+        ##TODO: draw text at pos...
+        pass
 
 
     def start( self ):
