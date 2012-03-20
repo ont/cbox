@@ -21,3 +21,14 @@ class Reper( object ):
 
     def __eq__( self, other ):
         return self.v1 == other.v1 and self.v2 == other.v2 and self.v3 == other.v3
+
+    def equal( self, other ):
+        """ Test for equality using rotations and reindexing
+        """
+        return set( self ) == set( other )  ## have we the same set of vectors ?
+
+    def flat( self ):
+        """ Return all vectors coordinates as flat list.
+            This is suitable for building matrix from reper.
+        """
+        return list( self.v1 ) + list( self.v2 ) + list( self.v3 )

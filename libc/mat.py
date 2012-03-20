@@ -88,6 +88,10 @@ class Mat( object ):
             return rr
 
 
+    def flat( self ):
+        """ Return flat representation of matrix
+        """
+        return [ self.m11, self.m12, self.m13, self.m21, self.m22, self.m23, self.m31, self.m32, self.m33 ]
 
     def __hash__( self ):
         return 1 ## can't be hashable A B C D E F ... X Y Z issue ---> sum( map( lambda x: int( x * 10 ), self[ 0 ] + self[ 1 ] + self[ 2 ] ) )
