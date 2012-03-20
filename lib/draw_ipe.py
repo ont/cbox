@@ -147,11 +147,12 @@ class DrawIPE( object ):
 
             self.ipe.objs.append( self.grp ) ## send created group to ipe
 
-        for g in self.objs_burn:  ## simply add already rendered objects to tree
-            grp = Group()
-            for o in g:
-                grp.add( o )
-            self.ipe.objs.append( grp ) ## send created group to ipe
+        if self.objs_burn != [[],]:
+            for g in self.objs_burn:  ## simply add already rendered objects to tree
+                grp = Group()
+                for o in g:
+                    grp.add( o )
+                self.ipe.objs.append( grp ) ## send created group to ipe
 
         for g in self.objs_ipe:
             for o in g:
