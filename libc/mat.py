@@ -30,7 +30,7 @@ class Mat( object ):
 
     def inv( self ):
         m11, m12, m13, m21, m22, m23, m31, m32, m33 =  self.m11, self.m12, self.m13, self.m21, self.m22, self.m23, self.m31, self.m32, self.m33
-        d = self.det()
+        d = float( self.det() )
         a11 = ( m22*m33 - m23*m32 ) / d
         a12 = ( m13*m32 - m12*m33 ) / d
         a13 = ( m12*m23 - m13*m22 ) / d

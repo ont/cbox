@@ -33,7 +33,9 @@ class DrawIPE( object ):
 
 
     def setup_drawgl( self, drawgl ):
-        self.setup( drawgl.gl.alpha * pi / 180, drawgl.gl.theta * pi / 180, drawgl.gl.dist )
+        al = drawgl.gl.alpha
+        th = drawgl.gl.theta
+        self.setup( al * pi / 180, th * pi / 180, drawgl.gl.dist )
 
 
     def proj( self, v ):
