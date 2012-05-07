@@ -42,6 +42,8 @@ class Vec( object ):
     def vdot( self, v ):
         return self.x*v.x + self.y*v.y + self.z*v.z
 
+    def flat( self ):
+        return ( self.x, self.y, self.z )
 
     def __mul__( self, o ):
         if type( o ) in ( int, float, long, complex ):
