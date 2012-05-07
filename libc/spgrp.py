@@ -13,7 +13,8 @@ class SpGrp( object ):
                   ##                         gens =  generators ( type, (x,y,z) )
 
     ## below are some aliases for ICSD crystallographic database
-    syns = { (76 ,1): ['P 41'],
+    syns = { (14 ,1): ['P 1 21/c 1'],
+             (76 ,1): ['P 41'],
              (77 ,1): ['P 42'],
              (78 ,1): ['P 43'],
              (80 ,1): ['I 41'],
