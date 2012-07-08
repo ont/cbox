@@ -14,6 +14,10 @@ class SpGrp( object ):
 
     ## below are some aliases for ICSD crystallographic database
     syns = { (14 ,1): ['P 1 21/c 1'],
+             (14 ,7): ['P 1 21/n 1'],
+             (17 ,1): ['P 2 2 21'],
+             (19 ,1): ['P 21 21 21'],
+             (70 ,2): ['F d d d Z'],
              (76 ,1): ['P 41'],
              (77 ,1): ['P 42'],
              (78 ,1): ['P 43'],
